@@ -1,0 +1,25 @@
+DEBUG: FALSE
+SECRET_KEY: # SECRET KEY
+
+# Database configuration
+DATABASE:
+  NAME: # Database name
+  USER: # User who has access to the database
+  PASSWORD: # Password of the user
+  HOST: "db"
+  PORT: 5432
+
+CHANNEL_LAYER:
+  HOST: "redis"
+  PORT: 6379
+
+ALLOWED_HOSTS:
+  - "localhost"
+  - "127.0.0.1"
+  - "db"
+
+CORS_ALLOWED_ORIGINS:
+  - "http://localhost:3000"
+
+STATIC_ROOT: "../static/"
+MEDIA_ROOT: "../media/"
