@@ -1,42 +1,74 @@
 version: '3.8'
 
 services:
+
   db:
-    restart: always
     build: ../postgres
+    restart: always
     container_name: floo_db
+
+    user: postgres
+
     env_file:
       - ../postgres/database.env
+
     expose:
       - 5432
+
     volumes:
-      - database:/var/lib/postgresql/data/
+      - type: volume
+        source: database
+        target: /var/lib/postgresql/data/
+        read_only: false
+      
     networks: 
       - floo_network
   
+
   redis:
-    restart: always
     build: ../redis
+    restart: always
     container_name: floo_redis
+
+    user: redis
+
     expose:
       - 6379
+
     networks: 
       - floo_network
   
+
   backend:
-    restart: always
     build:
       context: ../backend
+    restart: always
     container_name: floo_backend
+
+    user: django
     command: sh -c "python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - ../backend/code/:/code/
-      - ../static/:/static/
-      - ../media/:/media/
+
     expose:
       - 8000
     ports:
       - "54321:8000"
+
+    volumes:
+      - type: bind
+        source: ../backend/code/
+        target: /code/
+        read_only: true
+      
+      - type: volume
+        source: static
+        target: /static/
+        read_only: false
+      
+      - type: volume
+        source: media
+        target: /media/
+        read_only: false
+
     depends_on: 
       - db
       - redis
@@ -45,6 +77,9 @@ services:
 
 volumes:
   database:
+
+  static:
+  media:
 
 
 networks: 

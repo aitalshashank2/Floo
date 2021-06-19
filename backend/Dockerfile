@@ -17,13 +17,16 @@ RUN apk update && apk add postgresql-dev \
     libjpeg \
     cargo
 
+WORKDIR /
+
+# Make a virtual environment
+RUN python -m venv venv
+
+RUN source /venv/bin/activate
+
 # Upgrade pip and install necessary packages
 RUN pip install --upgrade pip \ 
-    && pip install --upgrade setuptools \ 
-    && pip install --upgrade pipenv \ 
     && pip install --upgrade supervisor
-
-WORKDIR /
 
 COPY ./requirements.txt ./requirements.txt
 

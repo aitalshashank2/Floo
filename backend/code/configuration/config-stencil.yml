@@ -6,12 +6,12 @@ DATABASE:
   NAME: # Database name
   USER: # User who has access to the database
   PASSWORD: # Password of the user
-  HOST: "db"
-  PORT: 5432
+  HOST: "db" # URL / IP of the database server
+  PORT: 5432 # Port on which the server is listening
 
 CHANNEL_LAYER:
-  HOST: "redis"
-  PORT: 6379
+  HOST: "redis" # URL / IP of the redis server
+  PORT: 6379 # Port on which the server is listening
 
 ALLOWED_HOSTS:
   - "localhost"
@@ -21,5 +21,8 @@ ALLOWED_HOSTS:
 CORS_ALLOWED_ORIGINS:
   - "http://localhost:3000"
 
+# Directory in which the static files will be stored
 STATIC_ROOT: "../static/"
+
+# Directory in which the media files will be stored
 MEDIA_ROOT: "../media/"

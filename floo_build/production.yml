@@ -4,13 +4,15 @@ services:
   db:
     build: ../postgres
     restart: always
-    container_name: floo_postgres
-    expose:
-      - 5432
-    
+    container_name: floo_db
+
     user: postgres
+
     env_file:
       - ../postgres/database.env
+
+    expose:
+      - 5432    
 
     volumes:
       - type: volume
@@ -26,10 +28,11 @@ services:
     build: ../redis
     restart: always
     container_name: floo_redis
-    expose:
-      - 6379
 
     user: redis
+
+    expose:
+      - 6379
 
     networks:
       - floo_network
@@ -40,19 +43,34 @@ services:
       context: ../backend
     restart: always
     container_name: floo_backend
+
+    user: django
+    command: sh -c "python manage.py collectstatic --no-input && python manage.py migrate && supervisord -c /supervisord.conf"
+
     expose:
       - 8000
       - 8001
-    
-    # user: django
-
-    command: sh -c "python manage.py collectstatic --no-input && supervisord -c /supervisord.conf"
 
     volumes:
-      - ../backend/code/:/code
-      - ../static/:/static/
-      - ../media/:/media/
-      - server_logs:/server_logs/
+      - type: bind
+        source: ../backend/code/
+        target: /code/
+        read_only: true
+
+      - type: volume
+        source: static
+        target: /static/
+        read_only: false
+      
+      - type: volume
+        source: media
+        target: /media/
+        read_only: false
+      
+      - type: volume
+        source: server_logs
+        target: /server_logs/
+        read_only: false
     
     depends_on:
       - db
@@ -74,9 +92,21 @@ services:
       - "54321:80"
     
     volumes:
-      - ../static/:/static/
-      - ../media/:/media/
-      - reverse_proxy_logs:/reverse_proxy_logs/
+      - type: volume
+        source: static
+        target: /static/
+        read_only: true
+      
+      - type: volume
+        source: media
+        target: /media/
+        read_only: true
+      
+      - type: volume
+        source: reverse_proxy_logs
+        target: /reverse_proxy_logs/
+        read_only: false
+
       
     depends_on:
       - backend
@@ -88,10 +118,12 @@ services:
 volumes:
   database:
 
+  static:
+  media:
   server_logs:
-  reverse_logs:
-  
+
   reverse_proxy_logs:
-  
+
+
 networks:
   floo_network:

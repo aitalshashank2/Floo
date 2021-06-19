@@ -1,15 +1,23 @@
+# Python virtual environments
 venv/
 env/
 .env/
 
+# Configurations
 __pycache__/
 
+# Database files
 .sqlite3
 
+# Storage Directories
 media/
 static/
 server_logs/
 reverse_proxy_logs/
 
+# Editor configurations
 .vscode/
 .idea/
+
+# Node modules
+node_modules/
