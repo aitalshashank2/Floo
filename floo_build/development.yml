@@ -3,10 +3,10 @@ version: '3.8'
 services:
   db:
     restart: always
-    build: postgres
+    build: ../postgres
     container_name: floo_db
     env_file:
-      - postgres/database.env
+      - ../postgres/database.env
     expose:
       - 5432
     volumes:
@@ -16,7 +16,7 @@ services:
   
   redis:
     restart: always
-    build: redis
+    build: ../redis
     container_name: floo_redis
     expose:
       - 6379
@@ -26,13 +26,13 @@ services:
   backend:
     restart: always
     build:
-      context: backend
+      context: ../backend
     container_name: floo_backend
     command: sh -c "python manage.py collectstatic --no-input && python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./backend/code/:/code/
-      - ./static/:/static/
-      - ./media/:/media/
+      - ../backend/code/:/code/
+      - ../static/:/static/
+      - ../media/:/media/
     expose:
       - 8000
     ports:

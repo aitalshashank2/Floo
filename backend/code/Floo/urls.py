@@ -5,6 +5,8 @@ from Floo.views import *
 
 router = routers.SimpleRouter()
 
-urlpatterns = []
+urlpatterns = [
+    path('', test_view, name='test_view'),
+]
 
 urlpatterns += router.urls
