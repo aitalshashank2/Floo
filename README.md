@@ -57,3 +57,7 @@
     ```bash
     docker-compose -f floo_build/production.yml down
     ```
+- To rebuild the frontend, use the following command.
+    ```bash
+    docker-compose -f floo_build/production.yml up frontend
+    ```

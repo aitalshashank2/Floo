@@ -1,7 +1,7 @@
 function App() {
   return (
     <div className="App">
-      Floo Initialized
+      Floo Initialized - Frontend
     </div>
   );
 }
