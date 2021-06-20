@@ -22,7 +22,7 @@ CORS_ALLOWED_ORIGINS:
   - "http://localhost:3000"
 
 # Directory in which the static files will be stored
-STATIC_ROOT: "../static/"
+STATIC_ROOT: "../floo_static/"
 
 # Directory in which the media files will be stored
-MEDIA_ROOT: "../media/"
+MEDIA_ROOT: "../floo_media/"

@@ -32,13 +32,13 @@ COPY ./requirements.txt ./requirements.txt
 
 RUN pip install -r requirements.txt
 
-RUN mkdir -p /static \ 
-    && chown -R django:django /static \ 
-    && chmod -R o+r /static
+RUN mkdir -p /floo_static \ 
+    && chown -R django:django /floo_static \ 
+    && chmod -R o+r /floo_static
 
-RUN mkdir -p /media \ 
-    && chown -R django:django /media \
-    && chmod -R o+r /media
+RUN mkdir -p /floo_media \ 
+    && chown -R django:django /floo_media \
+    && chmod -R o+r /floo_media
 
 #  Directories for server logs (in production)
 RUN mkdir -p /server_logs/supervisord/ \ 

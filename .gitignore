@@ -10,8 +10,8 @@ __pycache__/
 .sqlite3
 
 # Storage Directories
-media/
-static/
+floo_media/
+floo_static/
 server_logs/
 reverse_proxy_logs/
 
