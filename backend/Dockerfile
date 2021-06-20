@@ -2,6 +2,8 @@ FROM python:3.9.5-alpine
 
 ENV PYTHONUNBUFFERED 1
 
+LABEL maintainer="Shashank Aital <aitalshashank2@gmail.com>"
+
 # Make a user and group named django and 
 RUN addgroup --system django && adduser --system -G django django
 

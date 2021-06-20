@@ -1,5 +1,7 @@
 FROM nginx:alpine
 
+LABEL maintainer="Shashank Aital <aitalshashank2@gmail.com>"
+
 WORKDIR /
 
 RUN mkdir -p /reverse_proxy_logs/nginx_logs \ 
