@@ -3,10 +3,12 @@ from rest_framework import routers
 
 from Floo.views import *
 
+urlpatterns = [
+    path('', landing_view, name='landing_view'),
+]
+
 router = routers.SimpleRouter()
 
-urlpatterns = [
-    path('', test_view, name='test_view'),
-]
+router.register(r'user', UserViewSet)
 
 urlpatterns += router.urls

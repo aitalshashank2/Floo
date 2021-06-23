@@ -1,10 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import axios from 'axios'
+import React from "react"
+import ReactDOM from "react-dom"
+import { Provider } from "react-redux"
+import axios from "axios"
 
-import App from './App'
-import { store } from './store'
+import App from "./App"
+import { store } from "./store"
 
 axios.defaults.xsrfCookieName = 'floo_csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'

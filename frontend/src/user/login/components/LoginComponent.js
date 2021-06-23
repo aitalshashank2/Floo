@@ -1,5 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles'
-
+import { makeStyles } from "@material-ui/core/styles"
 import { 
     Avatar,
     Hidden,
@@ -8,10 +7,10 @@ import {
     Grid,
     Paper,
     Typography
- } from '@material-ui/core'
+ } from "@material-ui/core"
+ import FirePlaceRoundedIcon from "@material-ui/icons/FireplaceRounded"
 
-import logo from '../../../common/assets/green-fire.png'
-import FirePlaceRoundedIcon from '@material-ui/icons/FireplaceRounded'
+import logo from "../../../common/assets/green-fire.png"
 
 const LoginComponent = (props) => {
 

@@ -3,8 +3,8 @@ import { BrowserRouter as Router } from "react-router-dom"
 import { createMuiTheme } from "@material-ui/core/styles"
 import { ThemeProvider } from "@material-ui/core"
 
-import BaseRouter from './routes'
-import Nav from './common/Nav/NavContainer'
+import BaseRouter from "./routes"
+import Nav from "./common/Nav/NavContainer"
 import themes from "./common/themes"
 
 import { useSelector } from "react-redux"

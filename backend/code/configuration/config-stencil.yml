@@ -27,7 +27,11 @@ STATIC_ROOT: "../floo_static/"
 # Directory in which the media files will be stored
 MEDIA_ROOT: "../floo_media/"
 
+# Default profile picture
+DEFAULT_PROFILE_PICTURE: "https://i.stack.imgur.com/dr5qp.jpg"
+
 # Google OAuth
 GOOGLE_OAUTH:
   CLIENT_ID: # Google Client ID
   CLIENT_SECRET: # Client Secret
+  TOKEN_ENDPOINT: # Endpoint where Authorization code is received

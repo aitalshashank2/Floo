@@ -115,6 +115,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Admin site configuration
 ADMIN_SITE_URL = 'admin/'
 
+# Auth User model
+AUTH_USER_MODEL = 'Floo.User'
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
