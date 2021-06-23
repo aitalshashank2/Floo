@@ -12,13 +12,13 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 axios.defaults.withCredentials = true
 
 ReactDOM.render(
-    <Provider store={store}>
-        <React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
             <Router>
                 <Route path='/' component={App} />
             </Router>
-        </React.StrictMode>
-    </Provider>
+        </Provider>
+    </React.StrictMode>
     ,
     document.getElementById('root')
 );
