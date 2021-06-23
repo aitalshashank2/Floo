@@ -1,12 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-import Avatar from '@material-ui/core/Avatar'
-import Hidden from '@material-ui/core/Hidden'
-import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
-import { Typography } from '@material-ui/core'
+import { 
+    Avatar,
+    Hidden,
+    Button,
+    CssBaseline,
+    Grid,
+    Paper,
+    Typography
+ } from '@material-ui/core'
 
 import logo from '../../../common/assets/green-fire.png'
 import FirePlaceRoundedIcon from '@material-ui/icons/FireplaceRounded'
@@ -64,7 +66,7 @@ const LoginComponent = (props) => {
                 >
                     <img
                         src={logo}
-                        alt="Floo Image"
+                        alt="Floo Logo"
                         className={classes.image}
                     />
                 </Grid>
