@@ -26,3 +26,8 @@ STATIC_ROOT: "../floo_static/"
 
 # Directory in which the media files will be stored
 MEDIA_ROOT: "../floo_media/"
+
+# Google OAuth
+GOOGLE_OAUTH:
+  CLIENT_ID: # Google Client ID
+  CLIENT_SECRET: # Client Secret

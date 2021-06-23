@@ -4,7 +4,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import axios from 'axios'
 
-import App from './components/App'
+import App from './App'
 import { store } from './store'
 
 axios.defaults.xsrfCookieName = 'floo_csrftoken'
