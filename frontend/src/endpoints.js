@@ -3,6 +3,9 @@ const isDev = true
 const routeHome = isDev ? "http://localhost:54320/" : "http://localhost:54321/"
 export default routeHome
 
+export const routeLoader = `${routeHome}loader/`
+export const routeLogin = `${routeHome}login/`
+
 // Backend
 export const apiBase = "http://localhost:54321/api/"
 export const apiWSBase = "ws://localhost:54321/ws/"
