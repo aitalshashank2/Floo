@@ -1,13 +1,15 @@
+import { Redirect } from "react-router"
+import { useDispatch } from "react-redux"
+
 import { performLogout } from "../../api/auth/auth"
-import { routeLogin } from "../../endpoints"
 
 const Logout = () => {
 
-    performLogout()
-    window.location = routeLogin
+    const dispatch = useDispatch()
+    performLogout(dispatch)
 
     return (
-        <div>Logging you out</div>
+        <Redirect to="/login" />
     )
 
 }

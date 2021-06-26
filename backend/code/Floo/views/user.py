@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def login(self, request):
         if request.user.is_authenticated:
-            return Response({'error': 'User is already logged in!'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'A user is already logged in! Please log in again!'}, status=status.HTTP_400_BAD_REQUEST)
 
         data = request.data
         code = data['code']
@@ -101,4 +101,4 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer = UserGetSerializer(request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response({'status': 'User not logged in!'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'User not logged in!'}, status=status.HTTP_403_FORBIDDEN)

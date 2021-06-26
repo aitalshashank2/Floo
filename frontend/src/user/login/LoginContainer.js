@@ -1,6 +1,7 @@
 import randomstring from 'randomstring'
 
 import LoginComponent from "./components/LoginComponent"
+import Notification from '../../common/Notification/NotificationController'
 import { googleRedirect } from "../../endpoints"
 
 const Login = () => {
@@ -11,7 +12,10 @@ const Login = () => {
     const redirect = googleRedirect(state)
 
     return (
-        <LoginComponent googleRedirect={redirect} />
+        <>
+            <Notification />
+            <LoginComponent googleRedirect={redirect} />
+        </>
     )
 }
 

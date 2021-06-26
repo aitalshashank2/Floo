@@ -25,6 +25,8 @@ const reducer = (state = initialState, action) => {
             return changeTheme(state, action.payload.theme)
         case 'user/user_login':
             return changeUserInfo(state, action.payload)
+        case 'user/user_logout':
+            return initialState
         default:
             return state
     }

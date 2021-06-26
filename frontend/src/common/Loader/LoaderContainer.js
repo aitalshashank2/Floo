@@ -5,7 +5,6 @@ import LoaderComponent from "./components/LoaderComponent"
 
 const Loader = () => {
 
-    const state = useSelector(state => state)
     const apiState = useSelector(state => state.user.apiState)
 
     if(apiState === "pending"){

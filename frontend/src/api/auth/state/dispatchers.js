@@ -29,6 +29,12 @@ const actionErrorDetails = (errorDetails) => {
     }
 }
 
+const actionLogout = () => {
+    return {
+        type: 'user/user_logout'
+    }
+}
+
 // Action Dispatchers
 export const dispatchPendingState = (dispatch) => {
     dispatch(actionPendingState())
@@ -40,4 +46,8 @@ export const dispatchUserDetails = (dispatch, userDetails) => {
 
 export const dispatchErrorDetails = (dispatch, errorDetails) => {
     dispatch(actionErrorDetails(errorDetails))
+}
+
+export const dispatchLogout = (dispatch) => {
+    dispatch(actionLogout())
 }

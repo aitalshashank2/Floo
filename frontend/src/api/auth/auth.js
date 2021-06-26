@@ -2,13 +2,15 @@ import axios from "axios"
 
 import { 
     apiUserLogin,
-    apiUserLogout
+    apiUserLogout,
+    apiUserVerify
 } from "../../endpoints"
 
 import {
     dispatchErrorDetails,
     dispatchPendingState,
-    dispatchUserDetails
+    dispatchUserDetails,
+    dispatchLogout
  } from "./state/dispatchers"
 
 export const performLogin = (code, dispatch) => {
@@ -24,12 +26,23 @@ export const performLogin = (code, dispatch) => {
 
 }
 
-export const performLogout = () => {
+export const performLogout = (dispatch) => {
 
+    dispatchLogout(dispatch)
     axios.get(apiUserLogout).then(res => {
         // Pass
     }).catch(err => {
         // Pass
+    })
+
+}
+
+export const performVerify = (dispatch) => {
+
+    axios.get(apiUserVerify).then(res => {
+        dispatchUserDetails(dispatch, res.data)
+    }).catch(err => {
+        dispatchErrorDetails(dispatch, err.response.data.error)
     })
 
 }
