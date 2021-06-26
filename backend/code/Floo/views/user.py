@@ -47,10 +47,13 @@ class UserViewSet(viewsets.ModelViewSet):
             'grant_type': 'authorization_code'
         }
 
-        token = requests.post(
-            url=CONFIG_VARS['GOOGLE_OAUTH']['TOKEN_ENDPOINT'],
-            data=data
-        ).json()
+        try:
+            token = requests.post(
+                url=CONFIG_VARS['GOOGLE_OAUTH']['TOKEN_ENDPOINT'],
+                data=data
+            ).json()
+        except requests.exceptions.ConnectionError:
+            return Response({'error': 'Bad Gateway'}, status=status.HTTP_502_BAD_GATEWAY)
 
         if token == None:
             return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)
