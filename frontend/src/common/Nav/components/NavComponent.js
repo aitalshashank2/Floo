@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux"
+
 import {
     AppBar,
     IconButton,
@@ -5,7 +7,9 @@ import {
     Typography
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import NightsStayOutlinedIcon from '@material-ui/icons/NightsStayOutlined'
+import ExitToAppIcon from "@material-ui/icons/ExitToApp"
+import NightsStayOutlinedIcon from "@material-ui/icons/NightsStayOutlined"
+
 
 const NavComponent = (props) => {
 
@@ -18,6 +22,8 @@ const NavComponent = (props) => {
 
     const classes = useStyles()
 
+    const apiState = useSelector(state => state.user.apiState)
+
     return (
         <AppBar position="absolute">
             <Toolbar>
@@ -27,6 +33,9 @@ const NavComponent = (props) => {
                 <IconButton color="inherit" onClick={() => props.changeTheme()}>
                     <NightsStayOutlinedIcon />
                 </IconButton>
+                {(apiState === "success") && (<IconButton color="inherit" onClick={() => props.logout()}>
+                    <ExitToAppIcon />
+                </IconButton>)}
             </Toolbar>
         </AppBar>
     )

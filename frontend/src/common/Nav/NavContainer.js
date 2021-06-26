@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { Redirect } from "react-router-dom"
 import { useSelector, useDispatch } from 'react-redux'
 
 import NavComponent from "./components/NavComponent"
@@ -9,6 +11,8 @@ const Nav = () => {
 
     const theme = useSelector(state => state.user.theme)
     const dispatch = useDispatch()
+
+    const [pressedLogout, changePressedLogout] = useState(false)
 
     const changeTheme = () => {
 
@@ -29,10 +33,18 @@ const Nav = () => {
 
     }
 
+    const logout = () => {
+        changePressedLogout(true)
+    }
 
-    return (
-        <NavComponent changeTheme={changeTheme} />
-    )
+    if(pressedLogout){
+        return <Redirect to="logout" />
+    }else{
+        return (
+            <NavComponent changeTheme={changeTheme} logout={logout} />
+        )
+    }
+
 
 }
 
