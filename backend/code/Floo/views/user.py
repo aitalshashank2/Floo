@@ -17,11 +17,19 @@ from Floo.permissions import UserIsInSafeMethods
 
 class UserViewSet(viewsets.ModelViewSet):
 
-    queryset = User.objects.all()
+    queryset = User.objects.none()
     permission_classes = [
         UserIsInSafeMethods
     ]
     serializer_class = UserPostSerializer
+
+    def get_queryset(self):
+
+        if(self.request.user.is_authenticated):
+            return User.objects.filter(email = self.request.user.email)
+        else:
+            return User.objects.none()
+
 
     @action(detail=False, methods=['post'])
     def login(self, request):
