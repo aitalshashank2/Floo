@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Sree Krushnadevaraya
+- Font Author: Copyright (c) 2012 Andhrapradesh Society for Knowledge Networks (fonts.siliconandhra.org). Copyright (c) 2011-2012, Sorkin Type Co (www.sorkintype.com) with Reserved Font Name 'Cantata'
+- Font Source: http://fonts.gstatic.com/s/sreekrushnadevaraya/v10/R70FjzQeifmPepmyQQjQ9kvwMkWYPfTA_EWb2FhQuXir.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL)

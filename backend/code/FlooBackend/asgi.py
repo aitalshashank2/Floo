@@ -15,13 +15,13 @@ django_asgi_app = get_asgi_application()
 
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import Floo.routing
+import Floo.urls_ws
 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
     "websocket": AuthMiddlewareStack(
         URLRouter(
-            Floo.routing.websocket_urlpatterns
+            Floo.urls_ws.websocket_urlpatterns
         )
     ),
 })

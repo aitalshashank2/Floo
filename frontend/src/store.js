@@ -1,10 +1,14 @@
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
+import { createStore, applyMiddleware, combineReducers } from "redux"
+import thunk from "redux-thunk"
 
-import rootReducer from './reducers'
+import userReducer from "./user/state/reducers"
 
 const initialState = {}
 const middleware = [thunk]
+
+const rootReducer = combineReducers({
+    user: userReducer
+})
 
 export const store = createStore(
     rootReducer,
