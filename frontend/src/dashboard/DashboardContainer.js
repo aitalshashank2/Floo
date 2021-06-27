@@ -10,6 +10,9 @@ const Dashboard = () => {
     const apiState = useSelector(state => state.user.apiState)
     const dispatch = useDispatch()
 
+    const handleCreate = () => {
+        console.log("Create a meeting")
+    }
     
     if(apiState === "norequest"){
         performVerify(dispatch)
@@ -18,7 +21,7 @@ const Dashboard = () => {
         return (
             <>
                 <Notification />
-                <DashboardComponent />
+                <DashboardComponent handleCreate={handleCreate} />
             </>
         )
     }

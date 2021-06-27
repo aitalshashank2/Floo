@@ -6,6 +6,7 @@ import NotificationComponent from "./components/NotificationComponent"
 const Notification = () => {
 
     const user = useSelector(state => state.user)
+    const theme = useSelector(state => state.user.theme)
     const [notifState, changeNotifState] = useState({
         open: false,
         severity: "success",
@@ -40,6 +41,7 @@ const Notification = () => {
         <NotificationComponent
             notificationState={notifState}
             handleClose={handleClose}
+            variant={(theme === "default") ? "filled" : "outlined"}
         />
     )
 }

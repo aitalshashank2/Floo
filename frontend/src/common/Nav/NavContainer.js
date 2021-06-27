@@ -10,6 +10,7 @@ import { dispatchChangeTheme } from './state/dispatchers'
 const Nav = () => {
 
     const theme = useSelector(state => state.user.theme)
+    const apiState = useSelector(state => state.user.apiState)
     const dispatch = useDispatch()
 
     const [pressedLogout, changePressedLogout] = useState(false)
@@ -41,7 +42,7 @@ const Nav = () => {
         return <Redirect to="logout" />
     }else{
         return (
-            <NavComponent changeTheme={changeTheme} logout={logout} />
+            <NavComponent changeTheme={changeTheme} logout={logout} apiState={apiState} />
         )
     }
 
