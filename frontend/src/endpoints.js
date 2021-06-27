@@ -12,6 +12,7 @@ export const apiWSBase = "ws://localhost:54321/ws/"
 export const apiUserLogin = `${apiBase}user/login/`
 export const apiUserLogout = `${apiBase}user/logout/`
 export const apiUserVerify = `${apiBase}user/verify/`
+export const apiMeetingCreate = `${apiBase}meeting/new/`
 
 // Oauth
 const REDIRECT_URI = isDev ? "http%3A//localhost:54320/broker" : "http%3A//localhost:54321/broker"

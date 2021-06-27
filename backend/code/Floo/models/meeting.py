@@ -10,11 +10,11 @@ class Meeting(models.Model):
     attendees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         related_name = "meetings",
-        blank = False
+        blank = True
     )
 
     code = models.CharField(
-        max_length = 15,
+        max_length = 9,
         blank = False,
         null = False
     )

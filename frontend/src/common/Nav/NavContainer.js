@@ -39,7 +39,7 @@ const Nav = () => {
     }
 
     if(pressedLogout){
-        return <Redirect to="logout" />
+        return <Redirect to="/logout" />
     }else{
         return (
             <NavComponent changeTheme={changeTheme} logout={logout} apiState={apiState} />
