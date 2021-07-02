@@ -13,9 +13,10 @@ const BaseRouter = () => {
         <Switch>
             <Route exact path='/' component={Dashboard} />
             <Route exact path="/broker" component={Broker} />
-            <Route exact path='/loader' component={Loader} />
+            <Route exact path='/loader/?redirect=:redirect' component={Loader} />
+            <Route exact path="/loader" component={Loader} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/logout/?redirect=:redirect" component={Logout} />
+            <Route exact path="/logout" component={Logout} />
             <Route exact path="/meeting/:code" component={Meeting} />
             <Route exact path="/404" component={Page404} />
 

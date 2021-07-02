@@ -20,11 +20,13 @@ class UserGetSerializer(ModelSerializer):
         fields = [
             'full_name',
             'profile_picture',
-            'email'
+            'email',
+            'uuid'
         ]
 
         read_only_fields = [
             'full_name',
             'profile_picture',
-            'email'
+            'email',
+            'uuid'
         ]
