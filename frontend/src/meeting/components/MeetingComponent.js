@@ -9,11 +9,9 @@ const MeetingComponent = (props) => {
     const selfVideo = useRef()
     const selfStream = useRef()
 
-    const peers = useRef([])
+    const [peers, changePeers] = useState([])
     const peerObjects = useRef({})
     const remoteStreams = useRef({})
-
-    const [remoteVideoRefs, changeRemoteVideoRefs] = useState({})
 
     const self = useSelector(state => state.user.userDetails)
     
@@ -23,16 +21,6 @@ const MeetingComponent = (props) => {
         
         ws.current.onopen = () => {
             console.log("Connected")
-            navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
-                selfVideo.current.srcObject = stream
-                selfStream.current = stream
-    
-                peers.current.forEach(peer => {
-                    console.log("Calling " + peer.uuid)
-                    callUser(peer.uuid)
-                })
-    
-            })
         }
 
         ws.current.onmessage = (event) => {
@@ -47,7 +35,18 @@ const MeetingComponent = (props) => {
                         p.push(element)
                     }
                 });
-                peers.current = p
+                changePeers(p)
+
+                navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
+                    selfVideo.current.srcObject = stream
+                    selfStream.current = stream
+        
+                    p.forEach(peer => {
+                        console.log("Calling " + peer.uuid)
+                        callUser(peer.uuid)
+                    })
+        
+                })
 
             }else if((payload.type === "OFFER") && (self.uuid === payload.data.target)){
 
@@ -70,7 +69,15 @@ const MeetingComponent = (props) => {
 
             }else if((payload.type === "NEW_ATTENDEE") && (self.uuid !== payload.data.uuid)){
 
-                peers.current.push(payload.data)
+                changePeers(prev => {
+                    return [
+                        ...prev,
+                        payload.data
+                    ]
+                })
+                console.log("NEW ATTENDEE")
+                console.log(payload.data)
+                console.log(peers)
 
             }
 
@@ -123,15 +130,7 @@ const MeetingComponent = (props) => {
     const handleTrackEvent = (e, uuid) => {
         remoteStreams.current[uuid] = e.streams[0]
 
-        changeRemoteVideoRefs(prev => {
-            return {
-                ...prev,
-                [uuid]: createRef()
-            }
-        })
-
-        remoteVideoRefs[uuid].current.srcObject = remoteStreams.current[uuid]
-
+        document.getElementById(`video-${uuid}`).srcObject = e.streams[0]
     }
 
     const handleNegotiationNeededEvent = (e, uuid) => {
@@ -194,7 +193,19 @@ const MeetingComponent = (props) => {
 
     }
 
-    console.log(remoteStreams)
+    console.log(peers)
+    try{
+
+        peers.map((peer, i) => {
+            console.log("YAYYYYYYY")
+            console.log(peer)
+        })
+    }catch{
+        console.log("NOT SO MUCH")
+        console.log(peers)
+        console.log(typeof(peers))
+    }
+    
     return (
         <div>
             <video
@@ -206,14 +217,14 @@ const MeetingComponent = (props) => {
                 onContextMenu={e => {e.preventDefault()}}
             />
             {
-                Object.entries(remoteVideoRefs).map(([key, value]) => {
+                peers.map((peer, i) => {
                     return (
                         <video
                             autoPlay
                             playsInline
                             controls={false}
-                            key={key}
-                            ref={value}
+                            key={i}
+                            id={`video-${peer.uuid}`}
                             onContextMenu={e => {e.preventDefault()}}
                         />
                     )
