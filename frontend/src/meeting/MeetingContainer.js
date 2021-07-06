@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 
 import { performVerify } from "../api/auth/auth"
-import MeetingComponent from "./components/MeetingComponent"
+import WebRTCContainer from "./WebRTCContainer"
 import PreviewComponent from "./components/PreviewComponent"
 
 const Meeting = (props) => {
@@ -25,7 +25,7 @@ const Meeting = (props) => {
 
         if(approved){
             return (
-                <MeetingComponent code={code} />
+                <WebRTCContainer code={code} />
             )
         }
 

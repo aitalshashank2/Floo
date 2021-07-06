@@ -15,7 +15,8 @@ const NavComponent = (props) => {
     const useStyles = makeStyles((theme) => ({
         title: {
             flexGrow: 1,
-            fontWeight: 700
+            fontWeight: 700,
+            cursor: "pointer"
         }
     }))
 
@@ -24,7 +25,7 @@ const NavComponent = (props) => {
     return (
         <AppBar position="absolute">
             <Toolbar>
-                <Typography variant="h5" className={classes.title}>
+                <Typography variant="h5" className={classes.title} onClick={() => props.clickHome()}>
                     Floo
                 </Typography>
                 <Tooltip title="Change Theme">
