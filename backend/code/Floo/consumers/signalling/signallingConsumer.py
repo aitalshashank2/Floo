@@ -31,6 +31,7 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
 
             self.meeting = Meeting.objects.get(code=self.meeting_code)
             self.meeting.attendees.add(self.user)
+            self.meeting.current_attendees.add(self.user)
             async_to_sync(self.channel_layer.group_add)(
                 self.signalling_group_name,
                 self.channel_name
@@ -38,7 +39,7 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
             self.accept()
 
             # Send the information of all attendees to the new attendee
-            attendees = UserGetSerializer(self.meeting.attendees.all(), many=True).data
+            attendees = UserGetSerializer(self.meeting.current_attendees.all(), many=True).data
             payload = {
                 'type': 'ATTENDEES_LIST',
                 'data': attendees
@@ -58,6 +59,15 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
             self.close()
 
     def disconnect(self, code):
+
+        self.meeting.current_attendees.remove(self.user)
+        async_to_sync(self.channel_layer.group_send)(
+            self.signalling_group_name,
+            {
+                'type': 'exit_attendee',
+                'user': UserGetSerializer(self.user).data
+            }
+        )
 
         async_to_sync(self.channel_layer.group_discard)(
             self.signalling_group_name,

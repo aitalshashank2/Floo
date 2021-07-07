@@ -5,6 +5,10 @@ export default routeHome
 
 export const routeLoader = `${routeHome}loader/`
 export const routeLogin = `${routeHome}login/`
+export const routeMeetingBase = `${routeHome}meeting/`
+export const routeMeeting = (code) => {
+    return `${routeMeetingBase}${code}/`
+}
 
 // Backend
 

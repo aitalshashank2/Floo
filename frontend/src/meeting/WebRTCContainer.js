@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 
-import { apiWSMeetingSignal } from "../endpoints"
+import { apiWSMeetingSignal, routeMeeting } from "../endpoints"
 import MeetingComponent from "./components/MeetingComponent"
 
 
@@ -25,11 +25,11 @@ const WebRTCContainer = (props) => {
 
             const payload = JSON.parse(event.data)
 
-            if(payload.type === "ATTENDEES_LIST"){
+            if (payload.type === "ATTENDEES_LIST") {
 
                 var p = []
                 payload.data.forEach(element => {
-                    if(element.uuid !== self.uuid){
+                    if (element.uuid !== self.uuid) {
                         p.push(element)
                     }
                 });
@@ -44,19 +44,19 @@ const WebRTCContainer = (props) => {
                     })
                 })
 
-            }else if((payload.type === "OFFER") && (self.uuid === payload.data.target)){
+            } else if ((payload.type === "OFFER") && (self.uuid === payload.data.target)) {
 
                 handleReceiveCall(payload.data)
 
-            }else if((payload.type === "ANSWER") && (self.uuid === payload.data.target)){
+            } else if ((payload.type === "ANSWER") && (self.uuid === payload.data.target)) {
 
                 handleAnswer(payload.data)
 
-            }else if((payload.type === "ICE_CANDIDATE") && (self.uuid === payload.data.target)){
+            } else if ((payload.type === "ICE_CANDIDATE") && (self.uuid === payload.data.target)) {
 
                 handleNewIceCandidate(payload.data)
 
-            }else if((payload.type === "NEW_ATTENDEE") && (self.uuid !== payload.data.uuid)){
+            } else if ((payload.type === "NEW_ATTENDEE") && (self.uuid !== payload.data.uuid)) {
 
                 changePeers(prev => {
                     return [
@@ -64,6 +64,19 @@ const WebRTCContainer = (props) => {
                         payload.data
                     ]
                 })
+
+            } else if ((payload.type === "EXIT_ATTENDEE") && (self.uuid !== payload.data.uuid)){
+
+                changePeers(prev => {
+                    let p = []
+                    prev.forEach(peer => {
+                        if(peer.uuid !== payload.data.uuid){
+                            p.push(peer)
+                        }
+                    })
+                    return p
+                })
+
             }
 
         }
@@ -98,7 +111,7 @@ const WebRTCContainer = (props) => {
     }
 
     const handleIceCandidateEvent = (e, uuid) => {
-        if(e.candidate){
+        if (e.candidate) {
             const payload = {
                 type: "ICE_CANDIDATE",
                 data: {
@@ -180,8 +193,35 @@ const WebRTCContainer = (props) => {
 
     }
 
+
+    // Component event handlers
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(routeMeeting(props.code))
+    }
+
+    const handleToggleMic = () => {
+        console.log("Toggle Mic")
+    }
+
+    const handleToggleVideo = () => {
+        console.log("Toggle Video")
+    }
+
+    const handleLeave = () => {
+        ws.current.close()
+        window.location = "/"
+    }
+
     return (
-        <MeetingComponent selfStream={selfStream} peers={peers} peerStreams={peerStreams} />
+        <MeetingComponent
+            selfStream={selfStream}
+            peers={peers}
+            peerStreams={peerStreams}
+            handleCopyLink={handleCopyLink}
+            handleToggleMic={handleToggleMic}
+            handleToggleVideo={handleToggleVideo}
+            handleLeave={handleLeave}
+        />
     )
 
 }

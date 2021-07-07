@@ -6,9 +6,11 @@ import {
     Card,
     CardMedia,
     CssBaseline,
-    Grid
+    Grid,
+    Tooltip
 } from "@material-ui/core"
 import CallEndIcon from "@material-ui/icons/CallEnd"
+import LinkIcon from '@material-ui/icons/Link';
 import MicIcon from "@material-ui/icons/Mic"
 import MicOffIcon from "@material-ui/icons/MicOff"
 import VideocamIcon from "@material-ui/icons/Videocam"
@@ -107,7 +109,7 @@ const MeetingComponent = (props) => {
                     :
                     props.peers.map((peer, i) => {
                         return (
-                            <Card className={classes.mediaCard}>
+                            <Card className={classes.mediaCard} key={i}>
                                 <CardMedia
                                     component="video"
                                     autoPlay
@@ -123,15 +125,26 @@ const MeetingComponent = (props) => {
             </Grid>
 
             <div className={classes.controlsContainer}>
-                <Avatar className={classes.avatar}>
-                    <MicIcon />
-                </Avatar>
-                <Avatar className={classes.avatar}>
-                    <VideocamIcon />
-                </Avatar>
-                <Avatar className={classes.avatarLeave}>
-                    <CallEndIcon />
-                </Avatar>
+                <Tooltip title="Copy Link" onClick={() => props.handleCopyLink()}>
+                    <Avatar className={classes.avatar}>
+                        <LinkIcon />
+                    </Avatar>
+                </Tooltip>
+                <Tooltip title="Toggle Microphone" onClick={() => props.handleToggleMic()}>
+                    <Avatar className={classes.avatar}>
+                        <MicIcon />
+                    </Avatar>
+                </Tooltip>
+                <Tooltip title="Toggle Video" onClick={() => props.handleToggleVideo()}>
+                    <Avatar className={classes.avatar}>
+                        <VideocamIcon />
+                    </Avatar>
+                </Tooltip>
+                <Tooltip title="Leave" onClick={() => props.handleLeave()}>
+                    <Avatar className={classes.avatarLeave}>
+                        <CallEndIcon />
+                    </Avatar>
+                </Tooltip>
             </div>
 
         </Grid>

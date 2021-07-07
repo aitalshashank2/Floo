@@ -26,3 +26,11 @@ class ForwardingMixin:
         }
         self.send(text_data=json.dumps(payload))
 
+    
+    def exit_attendee(self, event):
+
+        payload = {
+            'type': 'EXIT_ATTENDEE',
+            'data': event['user']
+        }
+        self.send(text_data=json.dumps(payload))

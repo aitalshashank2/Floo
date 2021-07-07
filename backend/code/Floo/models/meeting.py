@@ -13,6 +13,12 @@ class Meeting(models.Model):
         blank = True
     )
 
+    current_attendees = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name = "ongoing_meetings",
+        blank = True
+    )
+
     code = models.CharField(
         max_length = 9,
         blank = False,
