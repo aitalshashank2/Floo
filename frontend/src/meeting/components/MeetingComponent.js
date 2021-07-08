@@ -93,14 +93,11 @@ const MeetingComponent = (props) => {
 
     useEffect(() => {
 
-        // console.log(props.selfStream)
-        // console.log(props.selfStream.current)
-
         document.getElementById(`video-self`).srcObject = props.selfStream
 
         props.peers.forEach((peer) => {
             if(props.peerStreams[peer.uuid]){
-                if(props.peerStreams[peer.uuid].getVideoTracks().length !== 0){
+                if(props.peerStreams[peer.uuid].getVideoTracks().length !== 0 && !props.peersWithVideosOff.includes(peer.uuid)){
                     document.getElementById(`video-${peer.uuid}`).srcObject = props.peerStreams[peer.uuid]
                 }
             }
@@ -137,17 +134,10 @@ const MeetingComponent = (props) => {
                     props.peers.map((peer, i) => {
                         if(props.peerStreams[peer.uuid]){
                             const vts = props.peerStreams[peer.uuid].getVideoTracks()
-                            if(vts.length === 0){
+                            if(vts.length === 0 || props.peersWithVideosOff.includes(peer.uuid)){
 
                                 return (
                                     <Card className={classes.mediaCard} key={i}>
-                                        {/* <CardMedia
-                                            component="img"
-                                            style={{
-                                                width: `${scale}vw`
-                                            }}
-                                            src={peer.profile_picture}
-                                        /> */}
                                         <div
                                             className={classes.imageContainer}
                                             style={{
