@@ -18,6 +18,10 @@ export const apiUserLogin = `${apiBase}user/login/`
 export const apiUserLogout = `${apiBase}user/logout/`
 export const apiUserVerify = `${apiBase}user/verify/`
 export const apiMeetingCreate = `${apiBase}meeting/new/`
+export const apiMeetingCreateWithTeam = (team_code) => {
+    return `${apiMeetingCreate}?team=${team_code}`
+}
+export const apiTeamsBase = `${apiBase}teams/`
 
 // WS
 export const apiWSBase = "ws://localhost:54321/ws/"

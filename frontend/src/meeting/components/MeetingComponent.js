@@ -55,9 +55,8 @@ const useStyles = makeStyles((theme) => ({
         cursor: "pointer"
     },
     galleryGrid: {
-        height: "85vh",
+        height: "92vh",
         width: "100%",
-        marginTop: "7vh",
     },
     mediaCard: {
         margin: "0 10px 0 10px",

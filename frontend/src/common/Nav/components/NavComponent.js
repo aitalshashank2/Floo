@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import ExitToAppIcon from "@material-ui/icons/ExitToApp"
+import VideoCallOutlinedIcon from '@material-ui/icons/VideoCallOutlined';
 import NightsStayOutlinedIcon from "@material-ui/icons/NightsStayOutlined"
 
 
@@ -33,6 +34,13 @@ const NavComponent = (props) => {
                         Floo
                     </div>
                 </Typography>
+                {(props.apiState === "success") && (
+                    <Tooltip title="Create an Instant Meeting">
+                        <IconButton color="inherit" onClick={() => props.createInstantMeeting()}>
+                            <VideoCallOutlinedIcon fontSize="large" />
+                        </IconButton>
+                    </Tooltip>
+                )}
                 <Tooltip title="Change Theme">
                     <IconButton color="inherit" onClick={() => props.changeTheme()}>
                         <NightsStayOutlinedIcon />

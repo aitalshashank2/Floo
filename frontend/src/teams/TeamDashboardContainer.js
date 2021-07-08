@@ -1,31 +1,31 @@
-import { Redirect } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
+import { Redirect } from "react-router-dom"
 
 import { performVerify } from "../api/auth/auth"
-import DashboardComponent from "./components/DashboardComponent"
-import Nav from "../common/Nav/NavContainer"
-import Notification from "../common/Notification/NotificationController"
 
-const Dashboard = () => {
+import Nav from "../common/Nav/NavContainer"
+import TeamDashboardComponent from "./components/TeamDashboardComponent"
+
+const TeamDashboard = (props) => {
+
+    const teamCode = props.match.params.code
 
     const apiState = useSelector(state => state.user.apiState)
     const dispatch = useDispatch()
 
     if(apiState === "norequest"){
         performVerify(dispatch)
-        return <Redirect to="/loader" />
+        return <Redirect to={`/loader/?redirect=/teams/${teamCode}`} />
     }else{
 
         return (
             <>
-                <Notification />
-                <Nav />
-                <DashboardComponent />
+                <Nav teamCode={teamCode} />
+                <TeamDashboardComponent />
             </>
         )
-
     }
 
 }
 
-export default Dashboard
+export default TeamDashboard

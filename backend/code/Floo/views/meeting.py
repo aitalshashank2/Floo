@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from Floo.models import Meeting
+from Floo.models import Meeting, Team
 from Floo.serializers.meeting import MeetingSerializer
 from Floo.permissions.meeting import ValidMethods
 
@@ -26,6 +26,16 @@ class MeetingViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def new(self, request):
+        teamCode = request.query_params.get('team')
+        t = None
+        if teamCode is not None:
+            try:
+                t = Team.objects.get(code = teamCode)
+                if request.user not in t.members.all():
+                    return Response({"error": "User is not in team"}, status=status.HTTP_400_BAD_REQUEST)
+            except Team.DoesNotExist:
+                return Response({"error": "Team Does not Exist"}, status=status.HTTP_400_BAD_REQUEST)
+
         code = "".join(random.choice(string.ascii_lowercase) for _ in range(9))
 
         while True:
@@ -37,6 +47,7 @@ class MeetingViewSet(viewsets.ModelViewSet):
 
         meeting = Meeting(
             code = code,
+            team = t
         )
         meeting.save()
 
