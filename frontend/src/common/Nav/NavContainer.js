@@ -23,6 +23,10 @@ const Nav = (props) => {
         createMeeting(dispatch, props.teamCode)
     }
 
+    const createTeam = () => {
+        window.location = "/teams/new"
+    }
+
     const changeTheme = () => {
 
         let newTheme
@@ -76,6 +80,7 @@ const Nav = (props) => {
         return (
             <NavComponent
                 createInstantMeeting={createInstantMeeting}
+                createTeam={createTeam}
                 changeTheme={changeTheme}
                 logout={logout}
                 apiState={apiState}

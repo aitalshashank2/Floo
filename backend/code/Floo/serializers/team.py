@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from Floo.models.team import Team
+
 from Floo.serializers.meeting import MeetingSerializer
 from Floo.serializers.user import UserGetSerializer
 

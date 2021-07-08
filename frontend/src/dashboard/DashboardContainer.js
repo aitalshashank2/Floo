@@ -9,7 +9,12 @@ import Notification from "../common/Notification/NotificationController"
 const Dashboard = () => {
 
     const apiState = useSelector(state => state.user.apiState)
+    const userDetails = useSelector(state => state.user.userDetails)
     const dispatch = useDispatch()
+
+    const handleTeamClick = (teamCode) => {
+        window.location = `/teams/${teamCode}`
+    }
 
     if(apiState === "norequest"){
         performVerify(dispatch)
@@ -20,7 +25,10 @@ const Dashboard = () => {
             <>
                 <Notification />
                 <Nav />
-                <DashboardComponent />
+                <DashboardComponent
+                    userDetails={userDetails}
+                    handleTeamClick={handleTeamClick}
+                />
             </>
         )
 
