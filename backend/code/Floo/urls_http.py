@@ -10,5 +10,6 @@ urlpatterns = [
 router = routers.SimpleRouter()
 
 router.register(r'user', UserViewSet)
+router.register(r'meeting', MeetingViewSet)
 
 urlpatterns += router.urls

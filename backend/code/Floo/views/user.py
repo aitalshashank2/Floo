@@ -17,11 +17,19 @@ from Floo.permissions import UserIsInSafeMethods
 
 class UserViewSet(viewsets.ModelViewSet):
 
-    queryset = User.objects.all()
+    queryset = User.objects.none()
     permission_classes = [
         UserIsInSafeMethods
     ]
     serializer_class = UserPostSerializer
+
+    def get_queryset(self):
+
+        if(self.request.user.is_authenticated):
+            return User.objects.filter(email = self.request.user.email)
+        else:
+            return User.objects.none()
+
 
     @action(detail=False, methods=['post'])
     def login(self, request):
@@ -39,10 +47,13 @@ class UserViewSet(viewsets.ModelViewSet):
             'grant_type': 'authorization_code'
         }
 
-        token = requests.post(
-            url=CONFIG_VARS['GOOGLE_OAUTH']['TOKEN_ENDPOINT'],
-            data=data
-        ).json()
+        try:
+            token = requests.post(
+                url=CONFIG_VARS['GOOGLE_OAUTH']['TOKEN_ENDPOINT'],
+                data=data
+            ).json()
+        except requests.exceptions.ConnectionError:
+            return Response({'error': 'Bad Gateway'}, status=status.HTTP_502_BAD_GATEWAY)
 
         if token == None:
             return Response({'error': 'Invalid Token'}, status=status.HTTP_400_BAD_REQUEST)

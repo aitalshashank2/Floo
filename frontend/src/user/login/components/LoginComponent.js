@@ -19,7 +19,7 @@ const LoginComponent = (props) => {
             height: "100vh",
         },
         image: {
-            width: "40%",
+            width: "25%",
         },
         imageContainer: {
             display: "flex",

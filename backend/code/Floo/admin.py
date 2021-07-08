@@ -6,3 +6,4 @@ admin.site.site_header = "Floo Administration"
 
 # Register your models here.
 admin.site.register(User)
+admin.site.register(Meeting)
