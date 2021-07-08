@@ -81,8 +81,8 @@ const useStyles = makeStyles((theme) => ({
         alignItems: "center"
     },
     hugeAvatar: {
-        width: theme.spacing(15),
-        height: theme.spacing(15)
+        width: theme.spacing(11),
+        height: theme.spacing(11)
     }
 }))
 
@@ -170,6 +170,7 @@ const MeetingComponent = (props) => {
                                                 height: `${scale*720/1280}vw`
                                             }}
                                             id={`video-${peer.uuid}`}
+                                            onContextMenu={e => e.preventDefault()}
                                         />
                                         <div className={classes.personInfo}>
                                             <Typography component="p" className={classes.cardName}>

@@ -41,7 +41,9 @@ const WebRTCContainer = (props) => {
                 changePeers(p)
 
                 navigator.mediaDevices.getUserMedia({
-                    audio: micRef.current,
+                    audio: micRef.current ? {
+                        echoCancellation: true
+                    } : micRef.current,
                     video: videoRef.current ? {
                         width: 1280,
                         height: 720
@@ -260,7 +262,9 @@ const WebRTCContainer = (props) => {
 
             // Mic is turned on
             navigator.mediaDevices.getUserMedia({
-                audio: micRef.current,
+                audio: micRef.current ? {
+                    echoCancellation: true
+                } : micRef.current,
                 video: videoRef.current ? {
                     width: 1280,
                     height: 720
@@ -318,7 +322,9 @@ const WebRTCContainer = (props) => {
 
             // Video is turned on
             navigator.mediaDevices.getUserMedia({
-                audio: micRef.current,
+                audio: micRef.current ? {
+                    echoCancellation: true
+                } : micRef.current,
                 video: videoRef.current ? {
                     width: 1280,
                     height: 720

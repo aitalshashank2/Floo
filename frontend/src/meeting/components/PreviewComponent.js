@@ -62,7 +62,9 @@ const PreviewComponent = (props) => {
     useEffect(() => {
 
         navigator.mediaDevices.getUserMedia({
-            audio: props.micState,
+            audio: props.micState ? {
+                echoCancellation: true
+            } : props.micState,
             video: props.videoState ? {
                 width: 1280,
                 height: 720
@@ -76,7 +78,7 @@ const PreviewComponent = (props) => {
             console.log("error: ", err)
         })
 
-        
+
     }, [videoRef])
 
     useEffect(() => {
@@ -110,7 +112,7 @@ const PreviewComponent = (props) => {
                     playsInline
                     className={classes.videoElement}
                     muted
-                    onContextMenu={e => {e.preventDefault()}}
+                    onContextMenu={e => { e.preventDefault() }}
                 />
             </Grid>
 
@@ -130,7 +132,7 @@ const PreviewComponent = (props) => {
                     <Typography variant="h5" className={classes.codeTypography}>
                         {props.code}
                     </Typography>
-                    
+
                     <Fab
                         color="secondary"
                         variant="extended"
