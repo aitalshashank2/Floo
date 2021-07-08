@@ -1,11 +1,26 @@
 from django.db import models
 from django.conf import settings
 
+from Floo.models.team import Team
 
 class Meeting(models.Model):
     """
     Model representing meetings
     """
+
+    title = models.CharField(
+        max_length=1023,
+        blank=True,
+        null=True,
+        default="Custom Meeting"
+    )
+
+    team = models.ForeignKey(
+        Team,
+        null = True,
+        on_delete = models.CASCADE,
+        related_name = "meetings"
+    )
 
     attendees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -35,4 +50,4 @@ class Meeting(models.Model):
     )
 
     def __str__(self):
-        return f"Meeting: {self.code}"
+        return f"{self.title}"

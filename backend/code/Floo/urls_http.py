@@ -11,5 +11,6 @@ router = routers.SimpleRouter()
 
 router.register(r'user', UserViewSet)
 router.register(r'meeting', MeetingViewSet)
+router.register(r'teams', TeamViewSet)
 
 urlpatterns += router.urls
