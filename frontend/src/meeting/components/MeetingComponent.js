@@ -7,7 +7,8 @@ import {
     CardMedia,
     CssBaseline,
     Grid,
-    Tooltip
+    Tooltip,
+    Typography
 } from "@material-ui/core"
 import CallEndIcon from "@material-ui/icons/CallEnd"
 import LinkIcon from '@material-ui/icons/Link';
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#666666",
         cursor: "pointer"
     },
-    avatarLeave: {
+    avatarRed: {
         margin: theme.spacing(1),
         backgroundColor: "red",
         cursor: "pointer"
@@ -59,7 +60,29 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "7vh",
     },
     mediaCard: {
-        margin: "0 10px 0 10px"
+        margin: "0 10px 0 10px",
+        maxHeight: "100%"
+    },
+    personInfo: {
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        alignItems: "flex-end",
+        justifyContent: "center",
+        zIndex: 6,
+    },
+    cardName: {
+        fontWeight: 700,
+        fontSize: "1.1em"
+    },
+    imageContainer: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    hugeAvatar: {
+        width: theme.spacing(15),
+        height: theme.spacing(15)
     }
 }))
 
@@ -76,7 +99,11 @@ const MeetingComponent = (props) => {
         document.getElementById(`video-self`).srcObject = props.selfStream
 
         props.peers.forEach((peer) => {
-            document.getElementById(`video-${peer.uuid}`).srcObject = props.peerStreams[peer.uuid]
+            if(props.peerStreams[peer.uuid]){
+                if(props.peerStreams[peer.uuid].getVideoTracks().length !== 0){
+                    document.getElementById(`video-${peer.uuid}`).srcObject = props.peerStreams[peer.uuid]
+                }
+            }
         })
 
         setScale(100 / (1.5 * (Math.ceil(Math.sqrt(props.peers.length)))))
@@ -108,18 +135,61 @@ const MeetingComponent = (props) => {
                     <div>No one else is here</div>
                     :
                     props.peers.map((peer, i) => {
-                        return (
-                            <Card className={classes.mediaCard} key={i}>
-                                <CardMedia
-                                    component="video"
-                                    autoPlay
-                                    style={{
-                                        width: `${scale}vw`,
-                                    }}
-                                    id={`video-${peer.uuid}`}
-                                />
-                            </Card>
-                        )
+                        if(props.peerStreams[peer.uuid]){
+                            const vts = props.peerStreams[peer.uuid].getVideoTracks()
+                            if(vts.length === 0){
+
+                                return (
+                                    <Card className={classes.mediaCard} key={i}>
+                                        {/* <CardMedia
+                                            component="img"
+                                            style={{
+                                                width: `${scale}vw`
+                                            }}
+                                            src={peer.profile_picture}
+                                        /> */}
+                                        <div
+                                            className={classes.imageContainer}
+                                            style={{
+                                                width: `${scale}vw`,
+                                                height: `${scale*720/1280}vw`
+                                            }}
+                                        >
+                                            <Avatar
+                                                alt={peer.full_name}
+                                                src={peer.profile_picture}
+                                                className={classes.hugeAvatar}
+                                            />
+                                        </div>
+                                        <div className={classes.personInfo}>
+                                            <Typography component="p" className={classes.cardName}>
+                                                {peer.full_name}
+                                            </Typography>
+                                        </div>
+                                    </Card>
+                                )
+
+                            }else{
+                                return (
+                                    <Card className={classes.mediaCard} key={i}>
+                                        <CardMedia
+                                            component="video"
+                                            autoPlay
+                                            style={{
+                                                width: `${scale}vw`,
+                                                height: `${scale*720/1280}vw`
+                                            }}
+                                            id={`video-${peer.uuid}`}
+                                        />
+                                        <div className={classes.personInfo}>
+                                            <Typography component="p" className={classes.cardName}>
+                                                {peer.full_name}
+                                            </Typography>
+                                        </div>
+                                    </Card>
+                                )
+                            }
+                        }
                     })
                 }
             </Grid>
@@ -130,18 +200,38 @@ const MeetingComponent = (props) => {
                         <LinkIcon />
                     </Avatar>
                 </Tooltip>
-                <Tooltip title="Toggle Microphone" onClick={() => props.handleToggleMic()}>
-                    <Avatar className={classes.avatar}>
-                        <MicIcon />
-                    </Avatar>
-                </Tooltip>
-                <Tooltip title="Toggle Video" onClick={() => props.handleToggleVideo()}>
-                    <Avatar className={classes.avatar}>
-                        <VideocamIcon />
-                    </Avatar>
-                </Tooltip>
+                {
+                    props.isMicActive
+                    ?
+                    <Tooltip title="Turn off microphone" onClick={() => props.handleToggleMic()}>
+                        <Avatar className={classes.avatar}>
+                            <MicIcon />
+                        </Avatar>
+                    </Tooltip>
+                    :
+                    <Tooltip title="Turn on microphone" onClick={() => props.handleToggleMic()}>
+                        <Avatar className={classes.avatarRed}>
+                            <MicOffIcon />
+                        </Avatar>
+                    </Tooltip>
+                }
+                {
+                    props.isVideoActive
+                    ?
+                    <Tooltip title="Turn off Video" onClick={() => props.handleToggleVideo()}>
+                        <Avatar className={classes.avatar}>
+                            <VideocamIcon />
+                        </Avatar>
+                    </Tooltip>
+                    :
+                    <Tooltip title="Turn on Video" onClick={() => props.handleToggleVideo()}>
+                        <Avatar className={classes.avatarRed}>
+                            <VideocamOffIcon />
+                        </Avatar>
+                    </Tooltip>
+                }
                 <Tooltip title="Leave" onClick={() => props.handleLeave()}>
-                    <Avatar className={classes.avatarLeave}>
+                    <Avatar className={classes.avatarRed}>
                         <CallEndIcon />
                     </Avatar>
                 </Tooltip>

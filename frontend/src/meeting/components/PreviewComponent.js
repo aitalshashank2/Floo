@@ -57,25 +57,36 @@ const PreviewComponent = (props) => {
 
     const classes = useStyles()
     const videoRef = useRef(null)
+    const streamObject = useRef()
 
     useEffect(() => {
 
         navigator.mediaDevices.getUserMedia({
-            audio: {
-                echoCancellation: true
-            },
-            video: {
-                width: 1280
-            }
+            audio: props.micState,
+            video: props.videoState ? {
+                width: 1280,
+                height: 720
+            } : props.videoState
         }).then(stream => {
             let video = videoRef.current
             video.srcObject = stream
+            streamObject.current = stream
             video.play()
         }).catch(err => {
             console.log("error: ", err)
         })
 
+        
     }, [videoRef])
+
+    useEffect(() => {
+
+        return () => {
+            // Stop all tracks while unmounting
+            streamObject.current.getTracks().map(t => t.stop())
+        }
+
+    }, [])
 
     return (
         // <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>

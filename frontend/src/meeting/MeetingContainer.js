@@ -14,24 +14,54 @@ const Meeting = (props) => {
 
     const [approved, changeApproved] = useState(false)
 
+    const [micState, changeMicState] = useState(true)
+    const [videoState, changeVideoState] = useState(true)
+
     const handleJoin = () => {
         changeApproved(true)
     }
 
-    if(apiState === "norequest"){
+    const handleMicToggle = () => {
+        changeMicState(prev => {
+            return !prev
+        })
+    }
+
+    const handleVideoToggle = () => {
+        changeVideoState(prev => {
+            return !prev
+        })
+    }
+
+    if (apiState === "norequest") {
         performVerify(dispatch)
         return <Redirect to={`/loader/?redirect=/meeting/${code}`} />
-    }else{
+    } else {
 
-        if(approved){
+        if (approved) {
             return (
-                <WebRTCContainer code={code} />
+                <WebRTCContainer
+                    code={code}
+                    micState={micState}
+                    videoState={videoState}
+                    handleMicToggle={handleMicToggle}
+                    handleVideoToggle={handleVideoToggle}
+                />
+            )
+        } else {
+
+
+            return (
+                <PreviewComponent
+                    code={code}
+                    handleJoin={handleJoin}
+                    micState={micState}
+                    videoState={videoState}
+                    handleMicToggle={handleMicToggle}
+                    handleVideoToggle={handleVideoToggle}
+                />
             )
         }
-
-        return (
-            <PreviewComponent code={code} handleJoin={handleJoin} />
-        )
     }
 
 }

@@ -10,10 +10,14 @@ const WebRTCContainer = (props) => {
     const ws = useRef()
     const peerObjects = useRef({})
     const selfStreamRef = useRef()
+    const senders = useRef({})
 
     const [selfStream, setSelfStream] = useState()
     const [peers, changePeers] = useState([])
     const [peerStreams, setPeerStreams] = useState({})
+
+    const micRef = useRef(props.micState)
+    const videoRef = useRef(props.videoState)
 
     const self = useSelector(state => state.user.userDetails)
 
@@ -35,7 +39,13 @@ const WebRTCContainer = (props) => {
                 });
                 changePeers(p)
 
-                navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(stream => {
+                navigator.mediaDevices.getUserMedia({
+                        audio: micRef.current,
+                        video: videoRef.current ? {
+                            width: 1280,
+                            height: 720
+                        } : videoRef.current
+                    }).then(stream => {
                     setSelfStream(stream)
                     selfStreamRef.current = stream
 
@@ -87,7 +97,13 @@ const WebRTCContainer = (props) => {
     const callUser = (uuid) => {
 
         peerObjects.current[uuid] = createPeerObject(uuid)
-        selfStreamRef.current.getTracks().forEach(track => peerObjects.current[uuid].addTrack(track, selfStreamRef.current))
+        senders.current[uuid] = {}
+        selfStreamRef.current.getTracks().forEach(track => {
+            if(!senders.current[uuid][track.kind]){
+                const sender = peerObjects.current[uuid].addTrack(track, selfStreamRef.current)
+                senders.current[uuid][track.kind] = sender
+            }
+        })
 
     }
 
@@ -96,8 +112,11 @@ const WebRTCContainer = (props) => {
 
         const peer = new RTCPeerConnection({
             iceServers: [
+                // {
+                //     urls: "stun:stun.stunprotocol.org"
+                // },
                 {
-                    urls: "stun:stun.stunprotocol.org"
+                    urls: "stun:stun.l.google.com:19302"
                 }
             ]
         })
@@ -134,6 +153,7 @@ const WebRTCContainer = (props) => {
     }
 
     const handleNegotiationNeededEvent = (e, uuid) => {
+
         peerObjects.current[uuid].createOffer().then(offer => {
             return peerObjects.current[uuid].setLocalDescription(offer)
         }).then(() => {
@@ -147,16 +167,31 @@ const WebRTCContainer = (props) => {
             }
             ws.current.send(JSON.stringify(payload))
         }).catch(e => console.log(e))
+
     }
 
     const handleReceiveCall = (data) => {
         // console.log(selfStream)
 
         const remote_uuid = data.caller
-        peerObjects.current[remote_uuid] = createPeerObject(remote_uuid)
-        const sessionDesciption = new RTCSessionDescription(data.sdp)
-        peerObjects.current[remote_uuid].setRemoteDescription(sessionDesciption).then(() => {
-            selfStreamRef.current.getTracks().forEach(track => peerObjects.current[remote_uuid].addTrack(track, selfStreamRef.current))
+        if(!peerObjects.current[remote_uuid]){
+            peerObjects.current[remote_uuid] = createPeerObject(remote_uuid)
+        }
+        const sessionDescription = new RTCSessionDescription(data.sdp)
+        peerObjects.current[remote_uuid].setRemoteDescription(sessionDescription).then(() => {
+
+            selfStreamRef.current.getTracks().forEach(track => {
+                console.log(track.kind)
+                console.log(senders.current[remote_uuid])
+                if(!senders.current[remote_uuid]){
+                    senders.current[remote_uuid] = {}
+                }
+                if(!senders.current[remote_uuid][track.kind]){
+                    const sender = peerObjects.current[remote_uuid].addTrack(track, selfStreamRef.current)
+                    senders.current[remote_uuid][track.kind] = sender
+                    console.log(sender)
+                }
+            })
         }).then(() => {
             return peerObjects.current[remote_uuid].createAnswer()
         }).then(answer => {
@@ -178,8 +213,8 @@ const WebRTCContainer = (props) => {
     }
 
     const handleAnswer = (data) => {
-        const sessionDesciption = new RTCSessionDescription(data.sdp)
-        peerObjects.current[data.caller].setRemoteDescription(sessionDesciption).catch(e => {
+        const sessionDescription = new RTCSessionDescription(data.sdp)
+        peerObjects.current[data.caller].setRemoteDescription(sessionDescription).catch(e => {
             console.log(e)
         })
     }
@@ -200,11 +235,42 @@ const WebRTCContainer = (props) => {
     }
 
     const handleToggleMic = () => {
-        console.log("Toggle Mic")
+        micRef.current = !micRef.current
+        props.handleMicToggle()
+
+        if(micRef.current){
+
+        }else{
+
+            // Mic is switched off
+            for(const [key, value] of Object.entries(peerObjects.current)){
+                peerObjects.current[key].removeTrack(senders.current[key]["audio"])
+            }
+            selfStreamRef.current.getTracks().map(t => t.kind === "audio" && t.stop())
+            setSelfStream(selfStreamRef.current)
+
+        }
+
     }
 
     const handleToggleVideo = () => {
-        console.log("Toggle Video")
+        videoRef.current = !videoRef.current
+        props.handleVideoToggle()
+
+        if(videoRef.current){
+
+        }else{
+
+            // Video is switched off
+            for(const [key, value] of Object.entries(peerObjects.current)){
+                console.log(key)
+                peerObjects.current[key].removeTrack(senders.current[key]["video"])
+            }
+            selfStreamRef.current.getTracks().map(t => t.kind === "video" && t.stop())
+            setSelfStream(selfStreamRef.current)
+
+        }
+
     }
 
     const handleLeave = () => {
@@ -217,6 +283,8 @@ const WebRTCContainer = (props) => {
             selfStream={selfStream}
             peers={peers}
             peerStreams={peerStreams}
+            isMicActive={props.micState}
+            isVideoActive={props.videoState}
             handleCopyLink={handleCopyLink}
             handleToggleMic={handleToggleMic}
             handleToggleVideo={handleToggleVideo}
