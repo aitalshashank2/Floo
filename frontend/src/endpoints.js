@@ -28,6 +28,7 @@ export const apiTeamsDetails = (team_code) => {
 export const apiTeamsJoin = (team_code) => {
     return `${apiTeamsBase}join/?team=${team_code}`
 }
+export const apiTopics = `${apiBase}topics/`
 
 // WS
 export const apiWSBase = "ws://localhost:54321/ws/"

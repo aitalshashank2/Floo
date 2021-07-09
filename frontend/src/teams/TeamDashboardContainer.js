@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
 
-import { apiTeamsDetails } from "../endpoints"
+import { apiTeamsDetails, apiTopics } from "../endpoints"
 import { performVerify } from "../api/auth/auth"
 
 import Nav from "../common/Nav/NavContainer"
@@ -20,7 +20,17 @@ const TeamDashboard = (props) => {
 
     const [teamInfo, setTeamInfo] = useState({})
     const [receivedTeamInfo, setReceivedTeamInfo] = useState(false)
-    const [isSettingsDialogueOpen, toggleSettingsDialogue] = useState(false)
+    const [isSettingsDialogOpen, toggleSettingsDialog] = useState(false)
+
+    const [isCreateTopicDialogOpen, toggleCreateTopicDialog] = useState(false)
+
+    const [createTopicTitle, setCreateTopicTitle] = useState("")
+    const [createTopicDescription, setCreateTopicDescription] = useState("")
+    const [isCreateTopicTitleNull, setIsCreateTopicTitleNull] = useState(false)
+    const [isCreateTopicDescriptionNull, setIsCreateTopicDescriptionNull] = useState(false)
+
+    const [isTopicDialogOpen, setIsTopicDialogOpen] = useState(false)
+    const [topicDialogID, setTopicDialogID] = useState()
 
     useEffect(() => {
 
@@ -53,18 +63,77 @@ const TeamDashboard = (props) => {
         })
     }
 
-    const openSettingsDialogue = () => {
+    const openSettingsDialog = () => {
         retrieveTeamInfo()
-        toggleSettingsDialogue(true)
+        toggleSettingsDialog(true)
     }
 
-    const closeSettingsDialogue = () => {
-        toggleSettingsDialogue(false)
+    const closeSettingsDialog = () => {
+        toggleSettingsDialog(false)
     }
 
     const handleCopyTeamCode = () => {
         navigator.clipboard.writeText(teamCode)
     }
+
+    const openCreateTopicDialog = () => {
+        toggleCreateTopicDialog(true)
+    }
+
+    const closeCreateTopicDialog = () => {
+        toggleCreateTopicDialog(false)
+        setCreateTopicTitle("")
+        setCreateTopicDescription("")
+    }
+
+    const handleCreateTopicTitle = (value) => {
+        setCreateTopicTitle(value)
+    }
+
+    const handleCreateTopicDescription = (value) => {
+        setCreateTopicDescription(value)
+    }
+
+    const handleCreateTopicPublish = () => {
+
+        if(createTopicTitle.length === 0){
+            setIsCreateTopicTitleNull(true)
+        }else{
+            setIsCreateTopicTitleNull(false)
+        }
+
+        if(createTopicDescription.length === 0){
+            setIsCreateTopicDescriptionNull(true)
+        }else{
+            setIsCreateTopicDescriptionNull(false)
+        }
+
+        if(createTopicTitle.length !== 0 && createTopicDescription.length !== 0){
+            
+            axios.post(apiTopics, {
+                "title": createTopicTitle,
+                "description": createTopicDescription,
+                "team": teamCode
+            }).then(res => {
+                window.location = `/teams/${teamCode}`
+            }).catch(err => {
+                console.log(err)
+            })
+
+        }
+
+    }
+
+    const openTopicDialog = (id) => {
+        setIsTopicDialogOpen(true)
+        setTopicDialogID(id)
+    }
+
+    const closeTopicDialog = () => {
+        setIsTopicDialogOpen(false)
+    }
+
+
 
     if(apiState === "norequest"){
         performVerify(dispatch)
@@ -77,13 +146,33 @@ const TeamDashboard = (props) => {
                 <>
                     <Nav
                         teamCode={teamCode}
-                        openSettingsDialogue={openSettingsDialogue}
+                        openSettingsDialog={openSettingsDialog}
                     />
                     <TeamDashboardComponent
+
                         teamInfo={teamInfo}
-                        isSettingsDialogueOpen={isSettingsDialogueOpen}
-                        closeSettingsDialogue={closeSettingsDialogue}
+
+                        isSettingsDialogOpen={isSettingsDialogOpen}
+                        closeSettingsDialog={closeSettingsDialog}
                         handleCopyTeamCode={handleCopyTeamCode}
+
+                        isCreateTopicDialogOpen={isCreateTopicDialogOpen}
+                        openCreateTopicDialog={openCreateTopicDialog}
+                        closeCreateTopicDialog={closeCreateTopicDialog}
+
+                        createTopicTitle={createTopicTitle}
+                        createTopicDescription={createTopicDescription}
+                        handleCreateTopicTitle={handleCreateTopicTitle}
+                        handleCreateTopicDescription={handleCreateTopicDescription}
+                        isCreateTopicTitleNull={isCreateTopicTitleNull}
+                        isCreateTopicDescriptionNull={isCreateTopicDescriptionNull}
+                        handleCreateTopicPublish={handleCreateTopicPublish}
+
+                        isTopicDialogOpen={isTopicDialogOpen}
+                        topicDialogID={topicDialogID}
+                        openTopicDialog={openTopicDialog}
+                        closeTopicDialog={closeTopicDialog}
+
                     />
                 </>
             )

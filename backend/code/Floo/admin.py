@@ -8,3 +8,4 @@ admin.site.site_header = "Floo Administration"
 admin.site.register(User)
 admin.site.register(Meeting)
 admin.site.register(Team)
+admin.site.register(Topic)

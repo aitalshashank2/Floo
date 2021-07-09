@@ -28,7 +28,7 @@ const Nav = (props) => {
     }
 
     const manageTeam = () => {
-        props.openSettingsDialogue()
+        props.openSettingsDialog()
     }
 
     const changeTheme = () => {
