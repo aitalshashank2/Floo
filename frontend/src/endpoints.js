@@ -22,6 +22,12 @@ export const apiMeetingCreateWithTeam = (team_code) => {
     return `${apiMeetingCreate}?team=${team_code}`
 }
 export const apiTeamsBase = `${apiBase}teams/`
+export const apiTeamsDetails = (team_code) => {
+    return `${apiTeamsBase}${team_code}/`
+}
+export const apiTeamsJoin = (team_code) => {
+    return `${apiTeamsBase}join/?team=${team_code}`
+}
 
 // WS
 export const apiWSBase = "ws://localhost:54321/ws/"

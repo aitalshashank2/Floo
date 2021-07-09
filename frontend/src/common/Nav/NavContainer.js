@@ -27,6 +27,10 @@ const Nav = (props) => {
         window.location = "/teams/new"
     }
 
+    const manageTeam = () => {
+        props.openSettingsDialogue()
+    }
+
     const changeTheme = () => {
 
         let newTheme
@@ -85,6 +89,8 @@ const Nav = (props) => {
                 logout={logout}
                 apiState={apiState}
                 clickHome={clickHome}
+                teamCode={props.teamCode}
+                manageTeam={manageTeam}
             />
         )
     }

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         width: "25%"
     },
     paperContainer: {
-        borderLeft: "1px solid #8787874d",
+        border: "1px solid #8787874d",
         display: "flex",
         justifyContent: "center",
         alignItems: "center"
@@ -69,25 +69,49 @@ const TeamCreationComponent = (props) => {
 
             <CssBaseline />
 
-            <Hidden smDown>
-                <Grid
-                    item
-                    md={7}
-                    className={classes.imageContainer}
-                >
-                    <img
-                        src={logo}
-                        alt="Floo Logo"
-                        className={classes.image}
-                    />
-                </Grid>
-            </Hidden>
+            <Grid
+                item
+                xs={12}
+                sm={12}
+                md={6}
+                component={Paper}
+                square
+                className={classes.paperContainer}
+            >
+                <div className={classes.container}>
+                    <Typography variant="h4" component="h4">
+                        Join Team
+                    </Typography>
+                    <div className={classes.formContainer}>
+                        <TextField
+                            required
+                            label="Team Code"
+                            variant="outlined"
+                            color="secondary"
+                            onChange={(e) => props.handleCode(e.target.value)}
+                            error={props.isCodeNull}
+                            fullWidth
+                            helperText={props.errorTextCode}
+                        />
+                        <div className={classes.avatarContainer}>
+                            <Tooltip title="Join">
+                                <Avatar className={classes.avatar}>
+                                    <IconButton color="inherit" onClick={() => props.handleJoin()}>
+                                        <FireplaceRoundedIcon />
+                                    </IconButton>
+                                </Avatar>
+                            </Tooltip>
+                        </div>
+                    </div>
+                </div>
+
+            </Grid>
 
             <Grid
                 item
                 xs={12}
                 sm={12}
-                md={5}
+                md={6}
                 component={Paper}
                 square
                 className={classes.paperContainer}
@@ -109,7 +133,7 @@ const TeamCreationComponent = (props) => {
                         <div className={classes.avatarContainer}>
                             <Tooltip title="Create">
                                 <Avatar className={classes.avatar}>
-                                    <IconButton color="inherit" onClick={props.handleCreate}>
+                                    <IconButton color="inherit" onClick={() => props.handleCreate()}>
                                         <FireplaceRoundedIcon />
                                     </IconButton>
                                 </Avatar>
@@ -117,6 +141,7 @@ const TeamCreationComponent = (props) => {
                         </div>
                     </div>
                 </div>
+
             </Grid>
 
         </Grid>

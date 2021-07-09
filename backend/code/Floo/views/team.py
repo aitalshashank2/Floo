@@ -4,6 +4,7 @@ import string
 from django.core.exceptions import ValidationError
 
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -53,3 +54,14 @@ class TeamViewSet(viewsets.ModelViewSet):
 
         except KeyError:
             return Response({'error': "Name field is empty"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    @action(detail=False, methods=['get'])
+    def join(self, request):
+        teamCode = request.query_params.get('team')
+        try:
+            t = Team.objects.get(code = teamCode)
+            t.members.add(request.user)
+            return Response(TeamGetSerializer(t).data, status=status.HTTP_200_OK)
+        except Team.DoesNotExist:
+            return Response({"error": "Team does not exist"}, status=status.HTTP_400_BAD_REQUEST)
