@@ -129,14 +129,22 @@ services:
 
     expose:
       - 80
+      - 443
     ports:
-      - "54321:80"
+      - "80:80"
+      - "443:443"
     
     volumes:
       # Bind mount to map the configuration files to the corresponding directory inside the container
       - type: bind
         source: ../nginx/conf.d/
         target: /etc/nginx/conf.d/
+        read_only: true
+
+      # Bind mount to map the SSL certificates to the corresponding directory inside the container
+      - type: bind
+        source: ../nginx/ssl/
+        target: /etc/nginx/ssl/
         read_only: true
 
       # Access the volume containing the static files created by the backend

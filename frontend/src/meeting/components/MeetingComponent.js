@@ -169,7 +169,8 @@ const MeetingComponent = (props) => {
             <Grid
                 justify="center"
                 alignItems="center"
-                container spacing={3}
+                container
+                spacing={3}
                 className={classes.galleryGrid}
             >
 

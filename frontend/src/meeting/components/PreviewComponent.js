@@ -85,7 +85,7 @@ const PreviewComponent = (props) => {
 
         return () => {
             // Stop all tracks while unmounting
-            streamObject.current.getTracks().map(t => t.stop())
+            // streamObject.current.getTracks().map(t => t.stop())
         }
 
     }, [])

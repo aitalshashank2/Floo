@@ -13,3 +13,5 @@ WORKDIR /etc/nginx
 RUN rm -f ./conf.d/default.conf
 
 ADD ./conf.d ./conf.d
+
+RUN mkdir certificates/
