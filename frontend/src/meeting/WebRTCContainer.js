@@ -392,6 +392,9 @@ const WebRTCContainer = (props) => {
             handleLeave={handleLeave}
             peersWithVideosOff={peersWithVideosOff}
             topicID={props.topicID}
+            isChatDrawerOpen={props.isChatDrawerOpen}
+            toggleChatDrawer={props.toggleChatDrawer}
+            meetingCode={props.code}
         />
     )
 

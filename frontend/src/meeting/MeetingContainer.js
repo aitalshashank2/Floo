@@ -20,6 +20,8 @@ const Meeting = (props) => {
     const [micState, changeMicState] = useState(true)
     const [videoState, changeVideoState] = useState(true)
 
+    const [isChatDrawerOpen, setIsChatDrawerOpen] = useState(false)
+
     const [topicID, setTopicID] = useState(null)
 
     const handleJoin = () => {
@@ -34,6 +36,12 @@ const Meeting = (props) => {
 
     const handleVideoToggle = () => {
         changeVideoState(prev => {
+            return !prev
+        })
+    }
+
+    const toggleChatDrawer = () => {
+        setIsChatDrawerOpen(prev => {
             return !prev
         })
     }
@@ -71,6 +79,8 @@ const Meeting = (props) => {
                     handleMicToggle={handleMicToggle}
                     handleVideoToggle={handleVideoToggle}
                     topicID={topicID}
+                    isChatDrawerOpen={isChatDrawerOpen}
+                    toggleChatDrawer={toggleChatDrawer}
                 />
             )
         } else {

@@ -44,6 +44,9 @@ export const apiWSMeetingBase = `${apiWSBase}meeting/`
 export const apiWSMeetingSignal = (code) => {
     return `${apiWSMeetingBase}${code}/signalling/`
 }
+export const apiWSMeetingChat = (code) => {
+    return `${apiWSMeetingBase}${code}/chat/`
+}
 export const apiWSMessage = (topicID) => {
     return `${apiWSBase}topics/${topicID}/`
 }
