@@ -30,7 +30,7 @@ const TeamDashboard = (props) => {
     const [isCreateTopicDescriptionNull, setIsCreateTopicDescriptionNull] = useState(false)
 
     const [isTopicDialogOpen, setIsTopicDialogOpen] = useState(false)
-    const [topicDialogID, setTopicDialogID] = useState()
+    const [topicDialog, setTopicDialog] = useState()
 
     useEffect(() => {
 
@@ -44,7 +44,6 @@ const TeamDashboard = (props) => {
                 setReceivedTeamInfo(true)
             }).catch(err => {
                 console.log(err)
-                window.location = "/"
             })
 
             // Cleanup
@@ -124,9 +123,9 @@ const TeamDashboard = (props) => {
 
     }
 
-    const openTopicDialog = (id) => {
+    const openTopicDialog = (topic) => {
         setIsTopicDialogOpen(true)
-        setTopicDialogID(id)
+        setTopicDialog(topic)
     }
 
     const closeTopicDialog = () => {
@@ -169,7 +168,7 @@ const TeamDashboard = (props) => {
                         handleCreateTopicPublish={handleCreateTopicPublish}
 
                         isTopicDialogOpen={isTopicDialogOpen}
-                        topicDialogID={topicDialogID}
+                        topicDialog={topicDialog}
                         openTopicDialog={openTopicDialog}
                         closeTopicDialog={closeTopicDialog}
 

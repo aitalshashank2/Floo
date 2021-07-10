@@ -13,16 +13,13 @@ from Floo.permissions.meeting import ValidMethods
 
 class MeetingViewSet(viewsets.ModelViewSet):
 
-    queryset = Meeting.objects.none()
+    queryset = Meeting.objects.all()
     permission_classes = [
         IsAuthenticated,
         ValidMethods
     ]
     serializer_class = MeetingSerializer
     lookup_field = "code"
-
-    def get_queryset(self):
-        return Meeting.objects.filter(attendees=self.request.user)
 
     @action(detail=False, methods=['get'])
     def new(self, request):

@@ -89,6 +89,8 @@ const MeetingComponent = (props) => {
 
     const classes = useStyles()
     const [scale, setScale] = useState(100)
+    
+    console.log(props.topicID)
 
     useEffect(() => {
 

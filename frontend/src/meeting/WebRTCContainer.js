@@ -391,6 +391,7 @@ const WebRTCContainer = (props) => {
             handleToggleVideo={handleToggleVideo}
             handleLeave={handleLeave}
             peersWithVideosOff={peersWithVideosOff}
+            topicID={props.topicID}
         />
     )
 
