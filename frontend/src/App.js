@@ -4,7 +4,6 @@ import { createMuiTheme } from "@material-ui/core/styles"
 import { ThemeProvider } from "@material-ui/core"
 
 import BaseRouter from "./routes"
-import Nav from "./common/Nav/NavContainer"
 import themes from "./common/themes"
 
 import { useSelector } from "react-redux"
@@ -19,7 +18,6 @@ const App = () => {
     return (
         <Router>
             <ThemeProvider theme={theme(currentTheme)}>
-                <Nav />
                 <BaseRouter />
             </ThemeProvider>
         </Router>

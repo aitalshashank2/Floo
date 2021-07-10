@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from asgiref.sync import async_to_sync
 
 from channels.auth import get_user
@@ -19,6 +20,10 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
         
         self.meeting_code = self.scope['url_route']['kwargs']['code']
         self.signalling_group_name = f"signalling_{self.meeting_code}"
+
+        # Check if meeting code has in valid format
+        if len(self.meeting_code) != 9:
+            self.close()
 
         # Check user authenticity
         self.user = async_to_sync(get_user)(self.scope)
@@ -61,6 +66,12 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
     def disconnect(self, code):
 
         self.meeting.current_attendees.remove(self.user)
+
+        if not self.meeting.current_attendees.all():
+            self.meeting.code = "expired"
+            self.meeting.end_time = datetime.now()
+            self.meeting.save()
+
         async_to_sync(self.channel_layer.group_send)(
             self.signalling_group_name,
             {

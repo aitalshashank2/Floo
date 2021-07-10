@@ -17,7 +17,26 @@ export const apiBase = "http://localhost:54321/api/"
 export const apiUserLogin = `${apiBase}user/login/`
 export const apiUserLogout = `${apiBase}user/logout/`
 export const apiUserVerify = `${apiBase}user/verify/`
-export const apiMeetingCreate = `${apiBase}meeting/new/`
+export const apiMeetingBase = `${apiBase}meeting/`
+export const apiMeetingCreate = `${apiMeetingBase}new/`
+export const apiMeetingDetail = (code) => {
+    return `${apiMeetingBase}${code}/`
+}
+export const apiMeetingCreateWithTeam = (team_code) => {
+    return `${apiMeetingCreate}?team=${team_code}`
+}
+export const apiTeamsBase = `${apiBase}teams/`
+export const apiTeamsDetails = (team_code) => {
+    return `${apiTeamsBase}${team_code}/`
+}
+export const apiTeamsJoin = (team_code) => {
+    return `${apiTeamsBase}join/?team=${team_code}`
+}
+export const apiTopics = `${apiBase}topics/`
+export const apiMessages = (topicID) => {
+    return `${apiTopics}${topicID}/messages/`
+}
+
 
 // WS
 export const apiWSBase = "ws://localhost:54321/ws/"
@@ -25,6 +44,13 @@ export const apiWSMeetingBase = `${apiWSBase}meeting/`
 export const apiWSMeetingSignal = (code) => {
     return `${apiWSMeetingBase}${code}/signalling/`
 }
+export const apiWSMeetingChat = (code) => {
+    return `${apiWSMeetingBase}${code}/chat/`
+}
+export const apiWSMessage = (topicID) => {
+    return `${apiWSBase}topics/${topicID}/`
+}
+
 
 // Oauth
 const REDIRECT_URI = isDev ? "http%3A//localhost:54320/broker" : "http%3A//localhost:54321/broker"

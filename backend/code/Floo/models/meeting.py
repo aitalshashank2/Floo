@@ -1,11 +1,19 @@
 from django.db import models
 from django.conf import settings
 
+from Floo.models.topic import Topic
 
 class Meeting(models.Model):
     """
     Model representing meetings
     """
+
+    topic = models.ForeignKey(
+        Topic,
+        null = True,
+        on_delete = models.CASCADE,
+        related_name = "meeting"
+    )
 
     attendees = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
@@ -35,4 +43,4 @@ class Meeting(models.Model):
     )
 
     def __str__(self):
-        return f"Meeting: {self.code}"
+        return f"{self.topic}"

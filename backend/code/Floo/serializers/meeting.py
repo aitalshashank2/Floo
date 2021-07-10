@@ -13,11 +13,13 @@ class MeetingSerializer(ModelSerializer):
             'attendees',
             'code',
             'start_time',
-            'end_time'
+            'end_time',
+            'topic'
         ]
         read_only_fields = [
             'attendees',
             'code',
             'start_time',
-            'end_time'
+            'end_time',
+            'topic'
         ]

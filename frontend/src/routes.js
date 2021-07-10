@@ -7,6 +7,8 @@ import Login from "./user/login/LoginContainer"
 import Logout from "./user/logout/logoutContainer"
 import Meeting from "./meeting/MeetingContainer"
 import Page404 from "./page404/Page404Container"
+import TeamCreation from "./teams/TeamCreationContainer"
+import TeamDashboard from "./teams/TeamDashboardContainer"
 
 const BaseRouter = () => {
     return (
@@ -18,6 +20,8 @@ const BaseRouter = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Logout} />
             <Route exact path="/meeting/:code" component={Meeting} />
+            <Route exact path="/teams/new" component={TeamCreation} />
+            <Route exact path="/teams/:code" component={TeamDashboard} />
             <Route exact path="/404" component={Page404} />
 
             <Route exact path="">

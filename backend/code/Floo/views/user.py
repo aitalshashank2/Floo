@@ -11,7 +11,8 @@ from rest_framework.response import Response
 from FlooBackend.settings import CONFIG_VARS
 
 from Floo.models import User
-from Floo.serializers import UserGetSerializer, UserPostSerializer
+from Floo.serializers.user import UserGetSerializer, UserPostSerializer
+from Floo.serializers.userVerbose import UserVerboseSerializer
 from Floo.permissions import UserIsInSafeMethods
 
 
@@ -21,7 +22,12 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [
         UserIsInSafeMethods
     ]
-    serializer_class = UserPostSerializer
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return UserPostSerializer
+        else:
+            return UserVerboseSerializer
 
     def get_queryset(self):
 
@@ -73,7 +79,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 user = User.objects.get(email=user_data['email'])
                 login(request, user)
 
-                user_serializer = UserGetSerializer(user)
+                user_serializer = UserVerboseSerializer(user)
                 user_data = user_serializer.data
                 return Response(user_data, status=status.HTTP_200_OK)
 
@@ -93,7 +99,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 new_user.save()
                 login(request, new_user)
 
-                serializer = UserGetSerializer(new_user)
+                serializer = UserVerboseSerializer(new_user)
                 return Response(serializer.data, status=status.HTTP_200_OK)
         except KeyError:
             return Response({'error': 'Token expired!'}, status=status.HTTP_400_BAD_REQUEST)
@@ -109,7 +115,7 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def verify(self, request):
         if request.user.is_authenticated:
-            serializer = UserGetSerializer(request.user)
+            serializer = UserVerboseSerializer(request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'User not logged in!'}, status=status.HTTP_403_FORBIDDEN)

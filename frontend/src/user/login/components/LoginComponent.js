@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles"
-import { 
+import {
     Avatar,
     Hidden,
     Button,
@@ -7,8 +7,8 @@ import {
     Grid,
     Paper,
     Typography
- } from "@material-ui/core"
- import FirePlaceRoundedIcon from "@material-ui/icons/FireplaceRounded"
+} from "@material-ui/core"
+import FirePlaceRoundedIcon from "@material-ui/icons/FireplaceRounded"
 
 import logo from "../../../common/assets/green-fire.png"
 

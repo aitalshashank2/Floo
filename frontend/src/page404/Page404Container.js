@@ -1,8 +1,12 @@
+import Nav from "../common/Nav/NavContainer"
 import Page404Component from "./components/Page404Component";
 
 const Page404 = () => {
     return (
-        <Page404Component />
+        <>
+            <Nav />
+            <Page404Component />
+        </>
     )
 }
 

@@ -1,14 +1,12 @@
 import { makeStyles } from "@material-ui/core/styles"
 import {
-    Avatar,
+    Card,
+    CardContent,
+    CardMedia,
     CssBaseline,
-    Fab,
     Grid,
-    Hidden,
-    Paper
+    Typography
 } from "@material-ui/core"
-import AddIcon from "@material-ui/icons/Add"
-import FireplaceRoundedIcon from "@material-ui/icons/FireplaceRounded"
 
 import logo from "../../common/assets/green-fire.png"
 
@@ -16,38 +14,18 @@ const useStyles = makeStyles((theme) => ({
     root: {
         height: "100vh"
     },
-    image: {
-        width: "25%"
+    card: {
+        maxWidth: "250px",
+        margin: theme.spacing(1),
+        cursor: "pointer"
     },
-    imageContainer: {
+    content: {
+        width: "100%",
         display: "flex",
-        alignItems: "center",
         justifyContent: "center"
     },
-    paperContainer: {
-        borderLeft: "1px solid #8787874d",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    formContainer: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center"
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main
-    },
-    fabContainer: {
-        margin: theme.spacing(1),
-        fontWeight: 700
-    },
-    fabIcon: {
-        marginRight: theme.spacing(1)
-    },
-    buttonTypography: {
-        fontWeight: 700
+    zeroTeamsContainer: {
+        textAlign: "center"
     }
 }))
 
@@ -56,49 +34,51 @@ const DashboardComponent = (props) => {
     const classes = useStyles()
 
     return (
-        <Grid container component="main" className={classes.root}>
+        <Grid
+            container
+            component="main"
+            className={classes.root}
+            justify="center"
+            alignItems="center"
+        >
 
             <CssBaseline />
 
-            <Hidden smDown>
-                <Grid
-                    item
-                    md={7}
-                    className={classes.imageContainer}
-                >
-                    <img
-                        src={logo}
-                        alt="Floo Logo"
-                        className={classes.image}
-                    />
-                </Grid>
-            </Hidden>
-
-            <Grid
-                item
-                xs={12}
-                sm={12}
-                md={5}
-                component={Paper}
-                square
-                className={classes.paperContainer}
-            >
-                <div className={classes.formContainer}>
-                    <Avatar className={classes.avatar}>
-                        <FireplaceRoundedIcon />
-                    </Avatar>
-                    <Fab
-                        color="secondary"
-                        variant="extended"
-                        className={classes.fabContainer}
-                        onClick={() => props.handleCreate()}
-                    >
-                        <AddIcon className={classes.fabIcon} />
-                            Create Meeting
-                    </Fab>
-                </div>
-            </Grid>
-
+            {
+                props.userDetails && 
+                (props.userDetails.teams.length === 0)
+                ?
+                (
+                    <div className={classes.zeroTeamsContainer}>
+                        <Typography variant="body2" component="body">
+                            You are not part of any teams yet!
+                        </Typography>
+                        <Typography variant="h4" component="h4">
+                            How about creating one?
+                        </Typography>
+                    </div>
+                )
+                :
+                (
+                    props.userDetails.teams.map(team => {
+                        return (
+                            <Card className={classes.card} key={team.code} onClick={() => props.handleTeamClick(team.code)}>
+                                <CardMedia
+                                    component="img"
+                                    src={logo}
+                                    title={team.code}
+                                />
+                                <CardContent className={classes.content}>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                        {team.name}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        )
+                    })
+                )
+            }
+            
         </Grid>
     )
 }

@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import LoginComponent from "./components/LoginComponent"
+import Nav from '../../common/Nav/NavContainer'
 import Notification from '../../common/Notification/NotificationController'
 import { apiUserVerify, googleRedirect } from "../../endpoints"
 import LoaderComponent from '../../common/Loader/components/LoaderComponent'
@@ -34,6 +35,7 @@ const Login = () => {
         return (
             <>
                 <Notification />
+                <Nav />
                 <LoginComponent googleRedirect={redirect} />
             </>
         )

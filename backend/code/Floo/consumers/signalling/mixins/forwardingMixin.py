@@ -1,6 +1,6 @@
 import json
 
-from Floo.serializers import UserGetSerializer
+from Floo.serializers.user import UserGetSerializer
 
 """
 This Mixin contains methods used for listening to webseocket events that are supposed to be forwarded to all clients
