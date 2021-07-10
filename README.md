@@ -25,6 +25,14 @@
         ```
     - Enter all the required credentials as required.
 
+- Make `frontend/src/configuration/config.js` using `frontend/src/configuration/config-stencil.js`
+    - From the root of the project, run the following commands
+        ```bash
+        cd ./frontend/src/configuration/
+        cp config-stencil.js config.js
+        ```
+    - Enter all the required credentials as required.
+
 ### Development server
 
 - Go to the project root directory.

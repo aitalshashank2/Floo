@@ -1,6 +1,11 @@
+import {
+    FRONTEND,
+    BACKEND,
+    OAUTH
+} from "./configuration/config"
+
 // Frontend
-const isDev = true
-const routeHome = isDev ? "http://localhost:54320/" : "http://localhost:54321/"
+const routeHome = FRONTEND.routeHome
 export default routeHome
 
 export const routeLoader = `${routeHome}loader/`
@@ -13,7 +18,7 @@ export const routeMeeting = (code) => {
 // Backend
 
 // HTTP
-export const apiBase = "http://localhost:54321/api/"
+export const apiBase = BACKEND.apiBase
 export const apiUserLogin = `${apiBase}user/login/`
 export const apiUserLogout = `${apiBase}user/logout/`
 export const apiUserVerify = `${apiBase}user/verify/`
@@ -39,7 +44,7 @@ export const apiMessages = (topicID) => {
 
 
 // WS
-export const apiWSBase = "ws://localhost:54321/ws/"
+export const apiWSBase = BACKEND.apiWSBase
 export const apiWSMeetingBase = `${apiWSBase}meeting/`
 export const apiWSMeetingSignal = (code) => {
     return `${apiWSMeetingBase}${code}/signalling/`
@@ -53,8 +58,8 @@ export const apiWSMessage = (topicID) => {
 
 
 // Oauth
-const REDIRECT_URI = isDev ? "http%3A//localhost:54320/broker" : "http%3A//localhost:54321/broker"
-const GOOGLE_CLIENT_ID = "447332830232-ojo6pfrul2sdbkehmj170gh9iokg3a30.apps.googleusercontent.com"
+const REDIRECT_URI = OAUTH.REDIRECT_URI
+const GOOGLE_CLIENT_ID = OAUTH.GOOGLE_CLIENT_ID
 
 export const googleRedirect = (state) => {
     return (
