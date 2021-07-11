@@ -4,9 +4,11 @@ import {
     CardContent,
     CardMedia,
     CssBaseline,
+    Fab,
     Grid,
     Typography
 } from "@material-ui/core"
+import GroupWorkOutlinedIcon from '@material-ui/icons/GroupWorkOutlined'
 
 import logo from "../../common/assets/green-fire.png"
 
@@ -26,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
     },
     zeroTeamsContainer: {
         textAlign: "center"
+    },
+    icon: {
+        margin: theme.spacing(1),
+        fontSize: "3em"
     }
 }))
 
@@ -50,12 +56,16 @@ const DashboardComponent = (props) => {
                 ?
                 (
                     <div className={classes.zeroTeamsContainer}>
-                        <Typography variant="body2" component="body">
+                        <Typography variant="body2" component="p">
                             You are not part of any teams yet!
                         </Typography>
                         <Typography variant="h4" component="h4">
                             How about creating one?
                         </Typography>
+
+                        <Fab color="primary" onClick={() => props.handleCreateJoinTeam()}>
+                            <GroupWorkOutlinedIcon className={classes.icon} />
+                        </Fab>
                     </div>
                 )
                 :

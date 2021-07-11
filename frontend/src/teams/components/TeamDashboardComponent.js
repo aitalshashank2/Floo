@@ -23,6 +23,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles"
 import AddIcon from '@material-ui/icons/Add'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
+import DirectionsRunIcon from '@material-ui/icons/DirectionsRun'
 
 import { Scrollbars } from 'react-custom-scrollbars'
 
@@ -54,7 +55,8 @@ const useStyles = makeStyles((theme) => ({
         width: "125em"
     },
     codeFab: {
-        float: "right"
+        float: "right",
+        margin: theme.spacing(1)
     },
     mainContainer: {
         maxWidth: "1250px",
@@ -100,6 +102,13 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         height: "50vh",
         padding: "1em"
+    },
+    noTopicsMessageContainer: {
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     }
 }))
 
@@ -133,6 +142,18 @@ const TeamDashboardComponent = (props) => {
             >
                 <DialogTitle style={{ width: "100%" }}>
                     {props.teamInfo.name}
+                    <Fab
+                        variant="extended"
+                        size="small"
+                        className={classes.codeFab}
+                        style={{ backgroundColor: "#E42E1B" }}
+                        onClick={() => props.handleLeaveTeam()}
+                    >
+                        <DirectionsRunIcon className={classes.extendedIcon} />
+                        <Typography variant="body2">
+                            Leave
+                        </Typography>
+                    </Fab>
                     <Fab
                         variant="extended"
                         size="small"
@@ -210,82 +231,82 @@ const TeamDashboardComponent = (props) => {
             {
                 props.topicDialog && (
                     props.topicDialog.meeting.length === 0
-                    ?
-                    (
-                        <Dialog
-                            open={props.isTopicDialogOpen}
-                            onClose={props.closeTopicDialog}
-                            className={classes.topicDialog}
-                            fullWidth
-                            maxWidth="md"
-                            scroll="body"
-                        >
-                            <DialogTitle>
-                                <Typography variant="h4" component="p">
-                                    {props.topicDialog.title}
-                                </Typography>
-                                <Typography variant="caption">
-                                    {`${props.topicDialog.creator.full_name} • ${moment(props.topicDialog.publish_time).format('LLL')}`}
-                                </Typography>
-                            </DialogTitle>
-                            <DialogContent>
-                                <Typography variant="h6" component="p">
-                                    Description
-                                </Typography>
-                                <Typography variant="body2" style={{ marginBottom: "2em" }}>
-                                    {props.topicDialog.description}
-                                </Typography>
-                                <Typography variant="h6">
-                                    Chat
-                                </Typography>
-                                <div className={classes.chatContainer}>
-                                    <Chat topicID={props.topicDialog.id} />
-                                </div>
-                            </DialogContent>
-                        </Dialog>
-                    )
-                    :
-                    (
-                        <Dialog
-                            open={props.isTopicDialogOpen}
-                            onClose={props.closeTopicDialog}
-                            className={classes.topicDialog}
-                            fullWidth
-                            maxWidth="md"
-                            scroll="body"
-                        >
-                            <DialogTitle>
-                                <Typography variant="h4" component="p">
-                                    Meeting
-                                </Typography>
-                                {
-                                    (props.topicDialog.meeting[0].end_time === null) && (
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            style={{ float: "right" }}
-                                            onClick={() => {
-                                                window.location = `/meeting/${props.topicDialog.meeting[0].code}`
-                                            }}
-                                        >
-                                            Join Now
-                                        </Button>
-                                    )
-                                }
-                                <Typography variant="caption">
-                                    {`${props.topicDialog.creator.full_name} • ${moment(props.topicDialog.publish_time).format('LLL')}`}
-                                </Typography>
-                            </DialogTitle>
-                            <DialogContent>
-                                <Typography variant="h6">
-                                    Chat
-                                </Typography>
-                                <div className={classes.chatContainer}>
-                                    <Chat topicID={props.topicDialog.id} />
-                                </div>
-                            </DialogContent>
-                        </Dialog>
-                    )
+                        ?
+                        (
+                            <Dialog
+                                open={props.isTopicDialogOpen}
+                                onClose={props.closeTopicDialog}
+                                className={classes.topicDialog}
+                                fullWidth
+                                maxWidth="md"
+                                scroll="body"
+                            >
+                                <DialogTitle>
+                                    <Typography variant="h4" component="p">
+                                        {props.topicDialog.title}
+                                    </Typography>
+                                    <Typography variant="caption">
+                                        {`${props.topicDialog.creator.full_name} • ${moment(props.topicDialog.publish_time).format('LLL')}`}
+                                    </Typography>
+                                </DialogTitle>
+                                <DialogContent>
+                                    <Typography variant="h6" component="p">
+                                        Description
+                                    </Typography>
+                                    <Typography variant="body2" style={{ marginBottom: "2em" }}>
+                                        {props.topicDialog.description}
+                                    </Typography>
+                                    <Typography variant="h6">
+                                        Chat
+                                    </Typography>
+                                    <div className={classes.chatContainer}>
+                                        <Chat topicID={props.topicDialog.id} />
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                        )
+                        :
+                        (
+                            <Dialog
+                                open={props.isTopicDialogOpen}
+                                onClose={props.closeTopicDialog}
+                                className={classes.topicDialog}
+                                fullWidth
+                                maxWidth="md"
+                                scroll="body"
+                            >
+                                <DialogTitle>
+                                    <Typography variant="h4" component="p">
+                                        Meeting
+                                    </Typography>
+                                    {
+                                        (props.topicDialog.meeting[0].end_time === null) && (
+                                            <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                style={{ float: "right" }}
+                                                onClick={() => {
+                                                    window.location = `/meeting/${props.topicDialog.meeting[0].code}`
+                                                }}
+                                            >
+                                                Join Now
+                                            </Button>
+                                        )
+                                    }
+                                    <Typography variant="caption">
+                                        {`${props.topicDialog.creator.full_name} • ${moment(props.topicDialog.publish_time).format('LLL')}`}
+                                    </Typography>
+                                </DialogTitle>
+                                <DialogContent>
+                                    <Typography variant="h6">
+                                        Chat
+                                    </Typography>
+                                    <div className={classes.chatContainer}>
+                                        <Chat topicID={props.topicDialog.id} />
+                                    </div>
+                                </DialogContent>
+                            </Dialog>
+                        )
                 )
             }
 
@@ -303,68 +324,90 @@ const TeamDashboardComponent = (props) => {
                         <div className={classes.mainContainer}>
 
                             <div className={classes.topicContainer}>
-                                <Scrollbars style={{ height: "100%", width: "100%" }}>
-                                    {
-                                        props.teamInfo.topics.map(topic => {
-                                            if(topic.meeting.length === 0){
 
-                                                return (
-                                                    <Card
-                                                        key={topic.id}
-                                                        className={classes.topicCard}
-                                                        onClick={() => { props.openTopicDialog(topic) }}
-                                                    >
-                                                        <CardHeader
-                                                            avatar={
-                                                                <Avatar
-                                                                    alt={topic.creator.full_name}
-                                                                    src={topic.creator.profile_picture}
-                                                                />
-                                                            }
-                                                            title={topic.title}
-                                                            subheader={`${topic.creator.full_name} • ${moment(topic.publish_time).format('LLL')}`}
-                                                        />
-                                                        <CardContent>
-                                                            <Typography variant="body2">
-                                                                {topic.description}
-                                                            </Typography>
-                                                        </CardContent>
-                                                    </Card>
-                                                )
+                                {
+                                    (props.teamInfo.topics.length === 0)
+                                        ?
+                                        (
+                                            <div className={classes.noTopicsMessageContainer}>
+                                                <div style={{ textAlign: "center" }}>
+                                                    <Typography variant="body2">
+                                                        There are no discussions yet.
+                                                    </Typography>
+                                                    <Typography variant="h5">
+                                                        Start a New Discussion
+                                                    </Typography>
+                                                    <div ref={scrollRef} />
+                                                </div>
+                                            </div>
+                                        )
+                                        :
+                                        (
 
-                                            }else if(topic.meeting.length === 1){
-                                                return (
-                                                    <Card
-                                                        key={topic.id}
-                                                        className={classes.topicCard}
-                                                        style={{
-                                                            border: (topic.meeting[0].end_time === null)
-                                                                ? "0.25px solid #28C24C"
-                                                                : "0.25px solid #C2289E"
-                                                        }}
-                                                        onClick={() => { props.openTopicDialog(topic) }}
-                                                        variant="outlined"
-                                                    >
-                                                        <CardHeader
-                                                            avatar={
-                                                                <Avatar
-                                                                    alt={topic.creator.full_name}
-                                                                    src={topic.creator.profile_picture}
-                                                                />
-                                                            }
-                                                            title={"Meeting"}
-                                                            subheader={`${topic.creator.full_name} • ${moment(topic.publish_time).format('LLL')}`}
-                                                        />
-                                                        
-                                                    </Card>
-                                                )
+                                            <Scrollbars style={{ height: "100%", width: "100%" }}>
+                                                {
+                                                    props.teamInfo.topics.map(topic => {
+                                                        if (topic.meeting.length === 0) {
 
-                                            }
-                                            
-                                        })
-                                    }
-                                    <div ref={scrollRef} />
-                                </Scrollbars>
+                                                            return (
+                                                                <Card
+                                                                    key={topic.id}
+                                                                    className={classes.topicCard}
+                                                                    onClick={() => { props.openTopicDialog(topic) }}
+                                                                >
+                                                                    <CardHeader
+                                                                        avatar={
+                                                                            <Avatar
+                                                                                alt={topic.creator.full_name}
+                                                                                src={topic.creator.profile_picture}
+                                                                            />
+                                                                        }
+                                                                        title={topic.title}
+                                                                        subheader={`${topic.creator.full_name} • ${moment(topic.publish_time).format('LLL')}`}
+                                                                    />
+                                                                    <CardContent>
+                                                                        <Typography variant="body2">
+                                                                            {topic.description}
+                                                                        </Typography>
+                                                                    </CardContent>
+                                                                </Card>
+                                                            )
+
+                                                        } else if (topic.meeting.length === 1) {
+                                                            return (
+                                                                <Card
+                                                                    key={topic.id}
+                                                                    className={classes.topicCard}
+                                                                    style={{
+                                                                        border: (topic.meeting[0].end_time === null)
+                                                                            ? "0.25px solid #28C24C"
+                                                                            : "0.25px solid #C2289E"
+                                                                    }}
+                                                                    onClick={() => { props.openTopicDialog(topic) }}
+                                                                    variant="outlined"
+                                                                >
+                                                                    <CardHeader
+                                                                        avatar={
+                                                                            <Avatar
+                                                                                alt={topic.creator.full_name}
+                                                                                src={topic.creator.profile_picture}
+                                                                            />
+                                                                        }
+                                                                        title={"Meeting"}
+                                                                        subheader={`${topic.creator.full_name} • ${moment(topic.publish_time).format('LLL')}`}
+                                                                    />
+
+                                                                </Card>
+                                                            )
+
+                                                        }
+
+                                                    })
+                                                }
+                                                <div ref={scrollRef} />
+                                            </Scrollbars>
+                                        )
+                                }
                             </div>
 
                             <div className={classes.bottomBar}>

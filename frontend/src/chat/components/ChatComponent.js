@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         alignItems: "flex-end",
         paddingBottom: "5em"
+    },
+    contentSavingWarning: {
+        backgroundColor: theme.palette.background.default
     }
 }))
 
@@ -73,6 +76,19 @@ const ChatComponent = (props) => {
             <div className={classes.chatContainer}>
                 
                 <Scrollbars style={{ height: "100%", width: "100%" }}>
+                    {
+                        props.showContentSavingWarning && 
+                        (
+                            <Card>
+                                <CardContent variant="caption" className={classes.contentSavingWarning}>
+                                    This meeting is not created from within a team and hence the messages can 
+                                    only be seen by people in the call. The messages are not saved and are unavailable
+                                    when the call ends. If the messages need to be preserved, please organize a meeting
+                                    from within a team.
+                                </CardContent>
+                            </Card>
+                        )
+                    }
                     {
                         props.messages.map(message => {
                             return (

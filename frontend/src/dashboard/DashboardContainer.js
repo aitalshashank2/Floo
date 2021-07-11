@@ -16,6 +16,10 @@ const Dashboard = () => {
         window.location = `/teams/${teamCode}`
     }
 
+    const handleCreateJoinTeam = () => {
+        window.location = "/teams/new"
+    }
+
     if(apiState === "norequest"){
         performVerify(dispatch)
         return <Redirect to="/loader" />
@@ -28,6 +32,7 @@ const Dashboard = () => {
                 <DashboardComponent
                     userDetails={userDetails}
                     handleTeamClick={handleTeamClick}
+                    handleCreateJoinTeam={handleCreateJoinTeam}
                 />
             </>
         )

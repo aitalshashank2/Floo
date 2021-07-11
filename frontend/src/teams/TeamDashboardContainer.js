@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect } from "react-router-dom"
 
-import { apiTeamsDetails, apiTopics } from "../endpoints"
+import { apiTeamsDetails, apiTopics, apiTeamsLeave } from "../endpoints"
 import { performVerify } from "../api/auth/auth"
 
 import Nav from "../common/Nav/NavContainer"
@@ -93,6 +93,16 @@ const TeamDashboard = (props) => {
         setCreateTopicDescription(value)
     }
 
+    const handleLeaveTeam = () => {
+
+        axios.get(apiTeamsLeave(teamCode)).then(res => {
+            window.location = "/"
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
+
     const handleCreateTopicPublish = () => {
 
         if(createTopicTitle.length === 0){
@@ -171,6 +181,8 @@ const TeamDashboard = (props) => {
                         topicDialog={topicDialog}
                         openTopicDialog={openTopicDialog}
                         closeTopicDialog={closeTopicDialog}
+
+                        handleLeaveTeam={handleLeaveTeam}
 
                     />
                 </>

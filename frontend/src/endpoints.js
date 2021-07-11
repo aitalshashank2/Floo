@@ -35,7 +35,10 @@ export const apiTeamsDetails = (team_code) => {
     return `${apiTeamsBase}${team_code}/`
 }
 export const apiTeamsJoin = (team_code) => {
-    return `${apiTeamsBase}join/?team=${team_code}`
+    return `${apiTeamsDetails(team_code)}join/`
+}
+export const apiTeamsLeave = (team_code) => {
+    return `${apiTeamsDetails(team_code)}leave/`
 }
 export const apiTopics = `${apiBase}topics/`
 export const apiMessages = (topicID) => {

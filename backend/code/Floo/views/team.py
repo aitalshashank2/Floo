@@ -56,12 +56,21 @@ class TeamViewSet(viewsets.ModelViewSet):
             return Response({'error': "Name field is empty"}, status=status.HTTP_400_BAD_REQUEST)
     
 
-    @action(detail=False, methods=['get'])
-    def join(self, request):
-        teamCode = request.query_params.get('team')
+    @action(detail=True, methods=['get'])
+    def join(self, request, code):
         try:
-            t = Team.objects.get(code = teamCode)
+            t = Team.objects.get(code = code)
             t.members.add(request.user)
             return Response(TeamGetSerializer(t).data, status=status.HTTP_200_OK)
         except Team.DoesNotExist:
-            return Response({"error": "Team does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Team does not exist"}, status = status.HTTP_400_BAD_REQUEST)
+
+
+    @action(detail=True, methods=['get'])
+    def leave(self, request, code):
+        try:
+            t = Team.objects.get(code = code)
+            t.members.remove(request.user)
+            return Response({"status": "Left the team"}, status = status.HTTP_200_OK)
+        except Team.DoesNotExist:
+            return Response({"error" : "Team Does not exist"}, status = status.HTTP_400_BAD_REQUEST)

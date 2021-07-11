@@ -73,6 +73,7 @@ const Chat = (props) => {
             newMessage={newMessage}
             handleTextBox={handleTextBox}
             handleSend={handleSend}
+            showContentSavingWarning={props.topicID === null}
         />
     )
 

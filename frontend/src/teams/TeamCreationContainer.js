@@ -55,7 +55,7 @@ const TeamCreation = () => {
             changeIsCodeNull(true)
         }else{
 
-            axios.get(apiTeamsJoin(code)).then(res => {
+            axios.get(apiTeamsJoin(code.toLowerCase())).then(res => {
                 window.location = `/teams/${res.data.code}`
             }).catch(err => {
                 changeIsCodeNull(true)
