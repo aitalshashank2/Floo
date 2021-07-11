@@ -48,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: "5em"
     },
     contentSavingWarning: {
-        backgroundColor: theme.palette.background.default
+        backgroundColor: theme.palette.background.default,
+        textAlign: "center"
     }
 }))
 

@@ -11,8 +11,9 @@ from rest_framework.response import Response
 from FlooBackend.settings import CONFIG_VARS
 
 from Floo.models import User
-from Floo.serializers.user import UserGetSerializer, UserPostSerializer
+from Floo.serializers.user import UserPostSerializer
 from Floo.serializers.userVerbose import UserVerboseSerializer
+from Floo.serializers.meeting import MeetingSerializer
 from Floo.permissions import UserIsInSafeMethods
 
 
@@ -119,3 +120,12 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'User not logged in!'}, status=status.HTTP_403_FORBIDDEN)
+
+    @action(detail=False, methods=['get'])
+    def present_meetings(self, request):
+        if request.user.is_authenticated:
+            m = request.user.ongoing_meetings.all()
+            data = MeetingSerializer(m, many=True).data
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'User is not logged in!'}, status=status.HTTP_403_FORBIDDEN)

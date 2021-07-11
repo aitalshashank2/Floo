@@ -19,9 +19,11 @@ export const routeMeeting = (code) => {
 
 // HTTP
 export const apiBase = BACKEND.apiBase
-export const apiUserLogin = `${apiBase}user/login/`
-export const apiUserLogout = `${apiBase}user/logout/`
-export const apiUserVerify = `${apiBase}user/verify/`
+export const apiUserBase = `${apiBase}user/`
+export const apiUserLogin = `${apiUserBase}login/`
+export const apiUserLogout = `${apiUserBase}logout/`
+export const apiUserVerify = `${apiUserBase}verify/`
+export const apiUserPresentMeetings = `${apiUserBase}present_meetings/`
 export const apiMeetingBase = `${apiBase}meeting/`
 export const apiMeetingCreate = `${apiMeetingBase}new/`
 export const apiMeetingDetail = (code) => {
