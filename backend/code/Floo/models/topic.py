@@ -6,7 +6,22 @@ from Floo.models.team import Team
 
 class Topic(models.Model):
     """
-    Model representing a topic in a team forum
+    A class representing a Topic Instance
+
+    ...
+
+    Attributes
+    ----------
+    title : CharField
+        A field storing the title of the topic instance
+    description : CharField
+        A field storing the description of the topic instance
+    creator : ForeignKey
+        A field which maps the topic to the user who has created the topic
+    team : ForeignKey
+        A field which maps the topic to the team in which it was published
+    publish_time : DateTimeField
+        A field which stores the time at which the topic was published
     """
 
     title = models.CharField(

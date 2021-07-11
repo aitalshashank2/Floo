@@ -7,7 +7,25 @@ from django.conf import settings
 
 class User(AbstractUser):
     """
-    Default user for Floo
+    A class representing a User instance
+
+    ...
+
+    Attributes
+    ----------
+    username : CharField
+        A field which stores the username of the user instance
+    full_name : CharField
+        A field which stores the full name of the user instance
+    profile_picture : CharField
+        A field which stores the link to the profile picture of the user
+    uuid : UUIDField
+        A field storing a unique identifier corresponding to the user
+    
+    Methods
+    -------
+    get_uuid()
+        Returns the string form of the uuid field of a user instance
     """
 
     username = models.CharField(

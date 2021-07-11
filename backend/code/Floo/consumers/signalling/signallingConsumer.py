@@ -34,6 +34,7 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
         # Close connection if meeting does not exist
         try:
 
+            # Find meeting corresponding to the consumer
             self.meeting = Meeting.objects.get(code=self.meeting_code)
             self.meeting.attendees.add(self.user)
             self.meeting.current_attendees.add(self.user)
@@ -65,6 +66,7 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
 
     def disconnect(self, code):
 
+        # Remove the user from meeting
         self.meeting.current_attendees.remove(self.user)
 
         if not self.meeting.current_attendees.all():

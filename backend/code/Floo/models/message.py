@@ -6,7 +6,20 @@ from Floo.models.topic import Topic
 
 class Message(models.Model):
     """
-    Model representing a message
+    A class representing a Message instance
+
+    ...
+
+    Attributes
+    ----------
+    sender : ForeignKey
+        A field representing the user who sent the message
+    topic : ForeignKey
+        A field representing the topic associated with the message
+    send_time : DateTimeField
+        A field representing the time of sending the message
+    body : CharField
+        A field storing the body of the message
     """
 
     sender = models.ForeignKey(
