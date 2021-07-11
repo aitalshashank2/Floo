@@ -14,10 +14,25 @@ from .mixins.forwardingMixin import ForwardingMixin
 class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
     """
     This consumer handles the signalling for video calling using WebRTC
+
+    Methods
+    -------
+    connect()
+        Handles the logic when an attendee joins the meeting
+    disconnect()
+        Handles the logic when an attendee exits a meeting
+    receive()
+        Handles the logic when there is a new message sent across the websocket
     """
 
     def connect(self):
-        
+        """ Handleslogic when an attendee joins the meeting
+
+        This function retrieves the meeting instance that corresponds to the url and 
+        adds the user to the list of attendees of that meeting. It adds the user to the 
+        group containing all the attendees of the meeting
+        """
+
         self.meeting_code = self.scope['url_route']['kwargs']['code']
         self.signalling_group_name = f"signalling_{self.meeting_code}"
 
@@ -45,7 +60,8 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
             self.accept()
 
             # Send the information of all attendees to the new attendee
-            attendees = UserGetSerializer(self.meeting.current_attendees.all(), many=True).data
+            attendees = UserGetSerializer(
+                self.meeting.current_attendees.all(), many=True).data
             payload = {
                 'type': 'ATTENDEES_LIST',
                 'data': attendees
@@ -65,6 +81,11 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
             self.close()
 
     def disconnect(self, code):
+        """Handles logic when an attendee leaves the meeting
+
+        - Removes the attendee from the list of current participants of a meeting and the corresponding group
+        - Resets the meeting code if no one is present in the meeting
+        """
 
         # Remove the user from meeting
         self.meeting.current_attendees.remove(self.user)
@@ -89,9 +110,11 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
         self.close()
 
     def receive(self, text_data):
+        """Forwards any message received from any of the attendees to all the attendees
+        """
+
         # Forward message from one client to all the clients
         payload = json.loads(text_data)
-
 
         signal_type = payload.get('type', None)
         signal_data = payload.get('data', None)
@@ -107,4 +130,3 @@ class SignallingConsumer(WebsocketConsumer, ForwardingMixin):
                 'payload': payload
             }
         )
-

@@ -2,28 +2,43 @@ import json
 
 from Floo.serializers.user import UserGetSerializer
 
-"""
-This Mixin contains methods used for listening to webseocket events that are supposed to be forwarded to all clients
-"""
+
 class ForwardingMixin:
     """
-    Forward the signal as is to all the attendees of a meeting
-    Handle the event `forward`
+    This Mixin contains methods used for listening to websocket events 
+    that are supposed to be forwarded to all clients
+
+    Methods
+    -------
+    forward(event)
+        Forward the payload received from `event` to all the users
+    new_attendee(event)
+        Notify all attendees of the arrival of a new attendee
+    exit_attendee(event)
+        Notify all attendees that an attendee has left the meeting
     """
 
     def forward(self, event):
-        """
-        Function to forward a webRTC message
+        """Function that forwards a message from one participant to all the participants
+
+        Parameters
+        ----------
+        event: dict
+            The event that is used to retrieve the payload to be forwarded
+
         """
 
         payload = event['payload']
-
         self.send(text_data=json.dumps(payload))
 
-
     def new_attendee(self, event):
-        """
-        Function that creates a new attendee
+        """Function that notifies all attendees of the arrival of a new attendee
+
+        Parameters
+        ----------
+        event : dict
+            The event that is used to retrieve the information of the attendee who just joined
+
         """
 
         payload = {
@@ -32,10 +47,14 @@ class ForwardingMixin:
         }
         self.send(text_data=json.dumps(payload))
 
-    
     def exit_attendee(self, event):
-        """
-        Function that is implemented when an attendee exits a meeting
+        """Function that notifies all attendees that an attendee has left the meeting
+
+        Paramters
+        ---------
+        event : dict
+            The event that is used to retrieve the information of the attendee that left the meeting
+
         """
 
         payload = {

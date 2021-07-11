@@ -1,0 +1,1 @@
+Copy `config-stencil.yml` to `config.yml` and populate the necessary values.
