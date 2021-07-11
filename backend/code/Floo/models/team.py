@@ -6,8 +6,6 @@ class Team(models.Model):
     """
     A class representing a Team instance
 
-    ...
-
     Attributes
     ----------
     name : CharField
@@ -19,20 +17,20 @@ class Team(models.Model):
     """
 
     name = models.CharField(
-        max_length = 1023,
-        blank = True,
-        null = True
+        max_length=1023,
+        blank=True,
+        null=True
     )
 
     members = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        related_name = "teams"
+        related_name="teams"
     )
 
     code = models.CharField(
-        max_length = 6,
-        blank = False,
-        null = False
+        max_length=6,
+        blank=False,
+        null=False
     )
 
     def __str__(self):
