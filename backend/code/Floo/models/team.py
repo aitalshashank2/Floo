@@ -4,7 +4,18 @@ from django.conf import settings
 
 class Team(models.Model):
     """
-    Model representing teams
+    A class representing a Team instance
+
+    ...
+
+    Attributes
+    ----------
+    name : CharField
+        A field representing the name of the team
+    members : ManyToManyField
+        A field representing the members of the team
+    code : CharField
+        A field representing the code corresponding to the team
     """
 
     name = models.CharField(

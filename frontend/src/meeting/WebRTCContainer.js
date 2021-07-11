@@ -258,49 +258,22 @@ const WebRTCContainer = (props) => {
         micRef.current = !micRef.current
         props.handleMicToggle()
 
+        selfStreamRef.current.getAudioTracks()[0].enabled = micRef.current
+
         if (micRef.current) {
 
             // Mic is turned on
-            navigator.mediaDevices.getUserMedia({
-                audio: micRef.current ? {
-                    echoCancellation: true
-                } : micRef.current,
-                video: videoRef.current ? {
-                    width: 1280,
-                    height: 720
-                } : videoRef.current
-            }).then(stream => {
-                setSelfStream(stream)
-                selfStreamRef.current = stream
-
-                for (const [key, value] of Object.entries(peerObjects.current)) {
-                    let senderList = peerObjects.current[key].getSenders()
-                    senderList.forEach(sender => {
-                        peerObjects.current[key].removeTrack(sender)
-                    })
-
-                    stream.getTracks().forEach(track => {
-                        senders.current[key][track.kind] = peerObjects.current[key].addTrack(track, selfStreamRef.current)
-                    })
+            const payload = {
+                type: "MIC_ON",
+                data: {
+                    uuid: self.uuid
                 }
-
-                const payload = {
-                    type: "MIC_ON",
-                    data: {
-                        uuid: self.uuid
-                    }
-                }
-                ws.current.send(JSON.stringify(payload))
-            })
+            }
+            ws.current.send(JSON.stringify(payload))
 
         } else {
 
             // Mic is switched off
-            for (const [key, value] of Object.entries(peerObjects.current)) {
-                peerObjects.current[key].removeTrack(senders.current[key]["audio"])
-            }
-            selfStreamRef.current.getTracks().map(t => t.kind === "audio" && t.stop())
-            setSelfStream(selfStreamRef.current)
 
             const payload = {
                 type: "MIC_OFF",
@@ -318,49 +291,23 @@ const WebRTCContainer = (props) => {
         videoRef.current = !videoRef.current
         props.handleVideoToggle()
 
+        selfStreamRef.current.getVideoTracks()[0].enabled = videoRef.current
+
         if (videoRef.current) {
 
             // Video is turned on
-            navigator.mediaDevices.getUserMedia({
-                audio: micRef.current ? {
-                    echoCancellation: true
-                } : micRef.current,
-                video: videoRef.current ? {
-                    width: 1280,
-                    height: 720
-                } : videoRef.current
-            }).then(stream => {
-                setSelfStream(stream)
-                selfStreamRef.current = stream
 
-                for (const [key, value] of Object.entries(peerObjects.current)) {
-                    let senderList = peerObjects.current[key].getSenders()
-                    senderList.forEach(sender => {
-                        peerObjects.current[key].removeTrack(sender)
-                    })
-
-                    stream.getTracks().forEach(track => {
-                        senders.current[key][track.kind] = peerObjects.current[key].addTrack(track, selfStreamRef.current)
-                    })
+            const payload = {
+                type: "VIDEO_ON",
+                data: {
+                    uuid: self.uuid
                 }
-
-                const payload = {
-                    type: "VIDEO_ON",
-                    data: {
-                        uuid: self.uuid
-                    }
-                }
-                ws.current.send(JSON.stringify(payload))
-            })
+            }
+            ws.current.send(JSON.stringify(payload))
 
         } else {
 
             // Video is switched off
-            for (const [key, value] of Object.entries(peerObjects.current)) {
-                peerObjects.current[key].removeTrack(senders.current[key]["video"])
-            }
-            selfStreamRef.current.getTracks().map(t => t.kind === "video" && t.stop())
-            setSelfStream(selfStreamRef.current)
 
             const payload = {
                 type: "VIDEO_OFF",

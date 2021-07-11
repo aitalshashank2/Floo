@@ -182,10 +182,15 @@ const MeetingComponent = (props) => {
                         props.peers.map((peer, i) => {
                             if (props.peerStreams[peer.uuid]) {
                                 const vts = props.peerStreams[peer.uuid].getVideoTracks()
-                                if (vts.length === 0 || props.peersWithVideosOff.includes(peer.uuid)) {
+                                const showImage = vts.length === 0 || props.peersWithVideosOff.includes(peer.uuid)
 
-                                    return (
-                                        <Card className={classes.mediaCard} key={i}>
+                                return (
+
+                                    <div key={i}>
+                                        <Card
+                                            className={classes.mediaCard}
+                                            hidden={!showImage}
+                                        >
                                             <div
                                                 className={classes.imageContainer}
                                                 style={{
@@ -205,13 +210,13 @@ const MeetingComponent = (props) => {
                                                 </Typography>
                                             </div>
                                         </Card>
-                                    )
-
-                                } else {
-                                    return (
-                                        <Card className={classes.mediaCard} key={i}>
+                                        <Card
+                                            className={classes.mediaCard}
+                                            hidden={showImage}
+                                        >
                                             <CardMedia
                                                 component="video"
+                                                hidden={showImage}
                                                 autoPlay
                                                 style={{
                                                     width: `${scale}vw`,
@@ -226,8 +231,8 @@ const MeetingComponent = (props) => {
                                                 </Typography>
                                             </div>
                                         </Card>
-                                    )
-                                }
+                                    </div>
+                                )
                             }
                         })
                 }

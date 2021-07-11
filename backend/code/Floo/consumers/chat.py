@@ -18,15 +18,17 @@ class ChatConsumer(WebsocketConsumer):
     """
 
     def connect(self):
+        # Retrieve the id of the topic associated with the comment
         self.topicID = self.scope['url_route']['kwargs']['pk']
         self.group_name = f"topic_{self.topicID}"
 
-        # Check user authenticity
+        # Check user authenticity 
         self.user = async_to_sync(get_user)(self.scope)
         if not self.user.is_authenticated:
             self.close()
 
         try:
+            # Retrieve the topic associated with the given ID
             self.topic = Topic.objects.get(pk=self.topicID)
 
             async_to_sync(self.channel_layer.group_add)(
@@ -47,11 +49,13 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         payload = json.loads(text_data)
 
+        # Retrieve the message body
         body = payload.get('body', None)
 
         if body is None:
             return
 
+        # Create a new message instance
         m = Message(
             sender=self.user,
             topic=self.topic,
@@ -61,6 +65,7 @@ class ChatConsumer(WebsocketConsumer):
 
         payload = MessageSerializer(m).data
 
+        # Send payload to every single participant
         async_to_sync(self.channel_layer.group_send)(
             self.group_name,
             {
@@ -80,6 +85,7 @@ class ForwardingChatConsumer(WebsocketConsumer):
     """
 
     def connect(self):
+        # Retrieve meeting code
         self.meeting_code = self.scope['url_route']['kwargs']['code']
         self.group_name = f"meeting_{self.meeting_code}"
 
@@ -89,6 +95,7 @@ class ForwardingChatConsumer(WebsocketConsumer):
             self.close()
 
         try:
+            # Retrieve the meeting associated with the chat
             self.meeting = Meeting.objects.get(code=self.meeting_code)
 
             async_to_sync(self.channel_layer.group_add)(
@@ -120,6 +127,7 @@ class ForwardingChatConsumer(WebsocketConsumer):
             "body": body
         }
 
+        # Send payload to all the participants in the meeting
         async_to_sync(self.channel_layer.group_send)(
             self.group_name,
             {
