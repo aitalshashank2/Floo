@@ -12,6 +12,9 @@ import {
 import FireplaceRoundedIcon from "@material-ui/icons/FireplaceRounded"
 import MeetingRoomRoundedIcon from "@material-ui/icons/MeetingRoomRounded"
 
+/**
+* Styles for custom material ui styling
+*/
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "100vh"
@@ -53,6 +56,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+/**
+ * Component for rendering the view before the actual meeting where the user can wait
+ * 
+ * @param {Object} props 
+ * 
+ * @param {string} props.code Meeting code
+ * @param {boolean} props.micState `true` if the microphone is enabled
+ * @param {boolean} props.videoState `true` if the video is enabled
+ * 
+ * @callback props.handleJoin Handle the `Join` button click
+ * 
+ * @returns {JSX.Element} PreviewComponent
+ */
 const PreviewComponent = (props) => {
 
     const classes = useStyles()
@@ -81,19 +97,7 @@ const PreviewComponent = (props) => {
 
     }, [videoRef])
 
-    useEffect(() => {
-
-        return () => {
-            // Stop all tracks while unmounting
-            // streamObject.current.getTracks().map(t => t.enabled = false)
-        }
-
-    }, [])
-
     return (
-        // <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-        //     <video ref={videoRef} autoPlay controls={false} playsInline style={{width: "1200px", borderRadius: "1em"}} />
-        // </div>
         <Grid container component="main" className={classes.root}>
 
             <CssBaseline />

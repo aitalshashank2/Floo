@@ -5,6 +5,26 @@ import { apiWSMeetingSignal, routeMeeting } from "../endpoints"
 import MeetingComponent from "./components/MeetingComponent"
 
 
+/**
+ * Container for Meeting Component
+ * 
+ * This component houses logic for WebRTC
+ * 
+ * @param {Object} props 
+ * 
+ * @param {string} props.code The code of the current meeting
+ * @param {number} props.topicID The ID of the topic that is associated with the current meeting (if available)
+ * 
+ * @param {boolean} props.micState `true` if microphone is on
+ * @param {boolean} props.videoState `true` if video is on
+ * @param {boolean} props.isChatDrawerOpen `true` if the chat drawer is open
+ * 
+ * @callback props.handleMicToggle Toggle the active state of microphone
+ * @callback props.handleVideoToggle Toggle the active state of video feed
+ * @callback props.toggleChatDrawer Toggle the visibility of chat drawer
+ * 
+ * @returns {JSX.Element} WebRTCContainer
+ */
 const WebRTCContainer = (props) => {
 
     const ws = useRef()
@@ -32,6 +52,7 @@ const WebRTCContainer = (props) => {
 
             if (payload.type === "ATTENDEES_LIST") {
 
+                // Received initial participants list
                 var p = []
                 payload.data.forEach(element => {
                     if (element.uuid !== self.uuid) {
@@ -40,6 +61,7 @@ const WebRTCContainer = (props) => {
                 });
                 changePeers(p)
 
+                // Retrieve the video and audio feed of the user and call all the other participants who are in the meeting
                 navigator.mediaDevices.getUserMedia({
                     audio: micRef.current ? {
                         echoCancellation: true
@@ -153,6 +175,7 @@ const WebRTCContainer = (props) => {
 
     }
 
+    // Handle ICE Candidates
     const handleIceCandidateEvent = (e, uuid) => {
         if (e.candidate) {
             const payload = {
@@ -167,6 +190,7 @@ const WebRTCContainer = (props) => {
         }
     }
 
+    // Append the local streams with the new track
     const handleTrackEvent = (e, uuid) => {
         setPeerStreams(prev => {
             return {
@@ -176,6 +200,7 @@ const WebRTCContainer = (props) => {
         })
     }
 
+    // Perform negotiations
     const handleNegotiationNeededEvent = (e, uuid) => {
 
         peerObjects.current[uuid].createOffer().then(offer => {
@@ -194,8 +219,10 @@ const WebRTCContainer = (props) => {
 
     }
 
+    // Receive Call
     const handleReceiveCall = (data) => {
 
+        // Create a new peer object and add self video feed to that peer object and exchange descriptions
         const remote_uuid = data.caller
         if (!peerObjects.current[remote_uuid]) {
             peerObjects.current[remote_uuid] = createPeerObject(remote_uuid)
@@ -232,6 +259,7 @@ const WebRTCContainer = (props) => {
 
     }
 
+    // Exchange descriptions
     const handleAnswer = (data) => {
         const sessionDescription = new RTCSessionDescription(data.sdp)
         peerObjects.current[data.caller].setRemoteDescription(sessionDescription).catch(e => {
@@ -239,6 +267,7 @@ const WebRTCContainer = (props) => {
         })
     }
 
+    // Add ICE Candidates
     const handleNewIceCandidate = (data) => {
 
         const candidate = new RTCIceCandidate(data.candidate)
@@ -248,8 +277,8 @@ const WebRTCContainer = (props) => {
 
     }
 
-
     // Component event handlers
+    
     const handleCopyLink = () => {
         navigator.clipboard.writeText(routeMeeting(props.code))
     }
