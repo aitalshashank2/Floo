@@ -1,3 +1,6 @@
+/**
+ * Themes used across the app
+ */
 const themes = {
     default: {
         type: "light",

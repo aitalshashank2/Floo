@@ -4,6 +4,9 @@ import {
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
+/**
+ * Styles for custom material ui styling
+ */
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
@@ -13,6 +16,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+/**
+ * Component for rendering a green loader in the middle of the screen
+ * 
+ * @returns {JSX.Element} LoaderComponent
+ */
 const LoaderComponent = () => {
 
     const classes = useStyles()

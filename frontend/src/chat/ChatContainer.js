@@ -7,13 +7,17 @@ import { apiMessages, apiWSMessage, apiWSMeetingChat } from "../endpoints"
 import { useSelector } from "react-redux"
 
 /**
+ * Container for Chat Component
+ * 
+ * This component handles the logic for retrieving all the messages corresponding to a meeting from 
+ * the backend and other utility functions
  * 
  * @param {Object} props 
  * 
  * @param {number} props.topicID Topic ID of which the meeting having this chat container is a part of
  * @param {string} props.meetingCode Meeting code of the meeting which houses this chat container
  * 
- * @returns {JSX.Element} ChatComponent
+ * @returns {JSX.Element} Chat
  */
 const Chat = (props) => {
 

@@ -14,8 +14,28 @@ import VideoCallOutlinedIcon from '@material-ui/icons/VideoCallOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 
 
+/**
+ * Component for rendering the Nav App
+ * 
+ * @param {Object} props 
+ * 
+ * @param {string} props.apiState String describes the current state of API request
+ * @param {string} props.teamCode String containing the code of the team if this button is clicked from within the team view
+ * 
+ * @callback props.clickHome Function handling `Home` icon click
+ * @callback props.createInstantMeeting Function handling `Create Instant Meeting` icon click
+ * @callback props.manageTeam Function handling `Manage Team` icon click
+ * @callback props.createTeam Function handling `Create Team` icon click
+ * @callback props.changeTheme Function to toggle theme
+ * @callback props.logout Function handling `Logout` icon click
+ * 
+ * @returns {JSX.Element} NavComponent
+ */
 const NavComponent = (props) => {
 
+    /**
+     * Styles for custom material ui styling
+     */
     const useStyles = makeStyles((theme) => ({
         title: {
             flexGrow: 1,
