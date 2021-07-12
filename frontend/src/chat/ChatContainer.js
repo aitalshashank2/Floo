@@ -6,6 +6,15 @@ import ChatComponent from "./components/ChatComponent"
 import { apiMessages, apiWSMessage, apiWSMeetingChat } from "../endpoints"
 import { useSelector } from "react-redux"
 
+/**
+ * 
+ * @param {Object} props 
+ * 
+ * @param {number} props.topicID Topic ID of which the meeting having this chat container is a part of
+ * @param {string} props.meetingCode Meeting code of the meeting which houses this chat container
+ * 
+ * @returns {JSX.Element} ChatComponent
+ */
 const Chat = (props) => {
 
     const ws = useRef()
@@ -18,7 +27,7 @@ const Chat = (props) => {
     // Retrieve previous chats
     useEffect(() => {
 
-        ws.current = new WebSocket((props.topicID !== null) 
+        ws.current = new WebSocket((props.topicID !== null)
             ? apiWSMessage(props.topicID)
             : apiWSMeetingChat(props.meetingCode)
         )
@@ -71,9 +80,9 @@ const Chat = (props) => {
         <ChatComponent
             messages={messages}
             newMessage={newMessage}
+            showContentSavingWarning={props.topicID === null}
             handleTextBox={handleTextBox}
             handleSend={handleSend}
-            showContentSavingWarning={props.topicID === null}
         />
     )
 
