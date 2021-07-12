@@ -18,6 +18,36 @@ from Floo.permissions import UserIsInSafeMethods
 
 
 class UserViewSet(viewsets.ModelViewSet):
+    """
+    This viewset houses the views for the User Model
+
+    Attributes
+    ----------
+    queryset : QuerySet
+        Initialized to an empty queryset of Team Model. Populated by using the function `get_queryset()`
+    permission_classes: list
+        Contains the following classes for permission rules
+            IsAuthenticated : User is allowed only if they are logged in
+    serializer_class : UserPostSerializer, UserVerboseSerializer
+
+    Methods
+    -------
+    get_queryset()
+        Assigns `queryset` attribute with all the users with the email same as the current user
+    get_serilaizer_class()
+        Gets the required serializer class depending on the request method
+
+    Actions
+    -------
+    login()
+        Logs a user in by using Google OAuth
+    logout()
+        Logs a user out
+    verify()
+        Checks if a user is logged in
+    present_meetings()
+        Retrieves all the meetings that the user is currently attending
+    """
 
     queryset = User.objects.none()
     permission_classes = [
@@ -25,21 +55,45 @@ class UserViewSet(viewsets.ModelViewSet):
     ]
 
     def get_serializer_class(self):
+        """Set the serializer class
+
+        - If the request method is POST, we use `UserPostSerializer`
+        - For any other method, we use `UserVerboseSerializer`
+        """
         if self.action == "create":
             return UserPostSerializer
         else:
             return UserVerboseSerializer
 
     def get_queryset(self):
+        """Assign `queryset` attribute to all the user objects that have same email as the current user
+        """
 
         if(self.request.user.is_authenticated):
-            return User.objects.filter(email = self.request.user.email)
+            return User.objects.filter(email=self.request.user.email)
         else:
             return User.objects.none()
 
-
     @action(detail=False, methods=['post'])
     def login(self, request):
+        """View that enables users to log in
+
+        The user is redirected here with the authorization code provided by Google and user information is retrieved from Google using that code
+
+        Parameters
+        ----------
+        request : django.http.HttpRequest
+            Request instance
+
+        Returns
+        -------
+        Response
+            - 200_OK : User logged in successfully. Sends user information.
+            - 400_BAD_REQUEST : User is already logged in
+            - 400_BAD_REQUEST : Token is invalid
+            - 400_BAD_REQUEST : Token expired
+            - 502_BAD_GATEWAY : Could not connect to Google Token Server
+        """
         if request.user.is_authenticated:
             return Response({'error': 'A user is already logged in! Please log in again!'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -107,6 +161,21 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def logout(self, request):
+        """View that enables users to log out
+
+        If a user makes a GET request to this endpoint, they get logged out
+
+        Parameters
+        ----------
+        request : django.http.HttpRequest
+            Request instance
+
+        Returns
+        -------
+        Response
+            - 200_OK : User is logged out successfully
+            - 400_BAD_REQUEST : User is not logged in
+        """
         if request.user.is_authenticated:
             logout(request)
             return Response({'status': 'User Logged out successfully!'}, status=status.HTTP_200_OK)
@@ -115,6 +184,19 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def verify(self, request):
+        """View that provides user details
+
+        Parameters
+        ----------
+        request : django.http.HttpRequest
+            Request instance
+
+        Returns
+        -------
+        Response
+            - 200_OK : User verified. Sends user information
+            - 400_BAD_REQUEST : User is not logged in
+        """
         if request.user.is_authenticated:
             serializer = UserVerboseSerializer(request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -123,6 +205,19 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def present_meetings(self, request):
+        """View that provides all the meetings that the user is a part of
+
+        Parameters
+        ----------
+        request : django.http.HttpRequest
+            Request instance
+
+        Returns
+        -------
+        Response
+            - 200_OK : Found user meetings. Sends user meetings.
+            - 400_BAD_REQUEST : User is not logged in.
+        """
         if request.user.is_authenticated:
             m = request.user.ongoing_meetings.all()
             data = MeetingSerializer(m, many=True).data
