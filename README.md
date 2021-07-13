@@ -8,70 +8,65 @@
 
 **Floo** is a platform for hosting meetings.
 
-## Setup guidelines
-- Clone the repository
-    ```bash
-    git clone https://github.com/aitalshashank2/Floo.git
-    cd Floo/
-    ```
+# Features
+- Google OAuth2.0 for authentication
+- Video call between multiple people
+- Functionality to mute the audio and stop the video feed
+- Preview before joining the video call
+- Create and join teams 
+- Discuss on the global forum specific to a team
+- Team specific meetings
+- List of all meetings in a team
+- Real time meeting chat
+- Chats in the meeting saved
+- Chats displayed on the global forum under a meeting
+- Team mebers can chat with the meeting participants without joining the meeting in real time
+- Screen recording
 
-- Make `backend/code/configuration/config.yml` using `backend/code/configuration/config-stencil.yml`.
-    - From the root of the project, run the following commands
-        ```bash
-        cd ./backend/code/configuration/
-        cp config-stencil.yml config.yml
-        ```
-    - Enter all the required credentials as required.
+# Architecture
+- The app's backend is made in django and the frontend is made using react. Check their individual folders for more details.
+- The app uses docker and docker-compose for enahncing portability.
+- Development network structure
+    - The following containers are the part of development network :
+        - db :
+            - This container houses the database for the app.
+            - It is built on PostgreSQL latest image.
+            - The actual database is stored in a volume so that it is preserved even if we shut the network down.
+        - redis :
+            - This container acts as a message broker.
+            - It is built on the base image of latest redis server.
+        - backend :
+            - This container houses the backend for the app.
+            - In this container, django runs on its development server.
+            - The backend code is mounted in this container so that the development server reloads whenever the code (outside the container) changes.
+            - It has volumes for storing its static and media files as well.
+        - frontend :
+            - This container houses the frontend for the app.
+            - We run react development server directly in this container.
+            - The code and public folders are mounted here so that any changes in these folders are reflected in the container instantly.
+    - The following containers are the part of production network
+        - db : 
+            - It has the same configuration as the one in the development network.
+        - redis :
+            - It has the same configuration as the one in the development network.
+        - backend :
+            - This container houses 2 seperate servers for serving WSGI (`gunicorn`) and ASGI (`daphne`) seperately. These servers are maintained by `supervisord`.
+            - While starting the container, we collect all the static files required by the backend and put them in the static volume.
+            - The media files and the code are mounted in their individual volumes as well.
+            - Finally we have a dedicated volume for preserving server logs.
+        - frontend :
+            - This container makes an optimized build of the code of the frontend and places the code in a volume dedicated to the frontend build.
+            - Then, the container exits.
+        - reverse_proxy :
+            - This container houses Nginx, as the reverse proxy server. We open the ports for http as well as https connections.
+            - We mount the configuration files and the SSL certificates for Nginx from their respective folders.
+            - Nginx serves the static files and the media files from their respective volumes.
+            - It serves the frontend build from its volume as well.
+            - All the logs are stored in a dedicated volume.
 
-- Make `postgres/database.env` using `postgres/database-stencil.yml`.
-    - From the root of the project, run the following commands
-        ```bash
-        cd ./postgres/
-        cp database-stencil.yml database.yml
-        ```
-    - Enter all the required credentials as required.
 
-- Make `frontend/src/configuration/config.js` using `frontend/src/configuration/config-stencil.js`
-    - From the root of the project, run the following commands
-        ```bash
-        cd ./frontend/src/configuration/
-        cp config-stencil.js config.js
-        ```
-    - Enter all the required credentials as required.
+# Contact Me
+Author - <a href="mailto:aitalshashank2@gmail.com">Shashank Aital</a>
 
-### Development server
-
-- Go to the project root directory.
-- Build the required images using the following command.
-    ```bash
-    docker-compose -f floo_build/development.yml build
-    ```
-- To start the Floo Network and all its containers, run the following command.
-    ```bash
-    docker-compose -f floo_build/development.yml up -d
-    ```
-- To stop the Floo Network and all its containers, run the following command.
-    ```bash
-    docker-compose -f floo_build/development.yml down
-    ```
-
-
-### Production server
-
-- Go to the project root directory.
-- Build the required images using the following command.
-    ```bash
-    docker-compose -f floo_build/production.yml build
-    ```
-- To start the Floo Network and all its containers, run the following command.
-    ```bash
-    docker-compose -f floo_build/production.yml up -d
-    ```
-- To stop the Floo Network and all its containers, run the following command.
-    ```bash
-    docker-compose -f floo_build/production.yml down
-    ```
-- To rebuild the frontend, use the following command.
-    ```bash
-    docker-compose -f floo_build/production.yml up frontend
-    ```
+# Deployment
+[Floo](https://floo.eastus.cloudapp.azure.com/)
