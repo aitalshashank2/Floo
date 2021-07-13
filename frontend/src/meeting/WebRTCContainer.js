@@ -44,6 +44,8 @@ const WebRTCContainer = (props) => {
     const [peers, changePeers] = useState([])
     // Dictionary containing the media streams of the peer connections
     const [peerStreams, setPeerStreams] = useState({})
+    // List of peers who have their microphone off
+    const [peersWithMicsOff, changePeersWithMicsOff] = useState([])
     // List of peers who have their video off
     const [peersWithVideosOff, changePeersWithVideosOff] = useState([])
 
@@ -144,6 +146,27 @@ const WebRTCContainer = (props) => {
             } else if ((payload.type === "VIDEO_ON")) {
 
                 changePeersWithVideosOff(prev => {
+                    let p = []
+                    prev.forEach(uuid => {
+                        if (uuid !== payload.data.uuid) {
+                            p.push(uuid)
+                        }
+                    })
+                    return p
+                })
+
+            } else if ((payload.type === "MIC_OFF")) {
+
+                changePeersWithMicsOff(prev => {
+                    return [
+                        ...prev,
+                        payload.data.uuid
+                    ]
+                })
+
+            } else if ((payload.type === "MIC_ON")) {
+
+                changePeersWithMicsOff(prev => {
                     let p = []
                     prev.forEach(uuid => {
                         if (uuid !== payload.data.uuid) {
@@ -327,7 +350,7 @@ const WebRTCContainer = (props) => {
             const payload = {
                 type: "MIC_OFF",
                 data: {
-                    user: self.uuid
+                    uuid: self.uuid
                 }
             }
             ws.current.send(JSON.stringify(payload))
@@ -459,6 +482,7 @@ const WebRTCContainer = (props) => {
             handleLeave={handleLeave}
             toggleRecording={toggleRecording}
 
+            peersWithMicsOff={peersWithMicsOff}
             peersWithVideosOff={peersWithVideosOff}
             topicID={props.topicID}
             isChatDrawerOpen={props.isChatDrawerOpen}

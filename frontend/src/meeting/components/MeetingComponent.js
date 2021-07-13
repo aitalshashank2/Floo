@@ -34,6 +34,7 @@ import Chat from "../../chat/ChatContainer"
  * @param {MediaStream} props.selfStream Contains the media stream of the user
  * @param {Array<string>} props.peers List of the uuids of the participants
  * @param {Object<string, MediaStream>} props.peerStreams Dictionary mapping media streams of the peers with their uuids
+ * @param {Array<string>} props.peersWithMicsOff
  * @param {Array<string>} props.peersWithVideosOff List of the uuids of all the participants with their video off
  * 
  * @param {boolean} props.isMicActive `true` is microphone is active
@@ -213,7 +214,9 @@ const MeetingComponent = (props) => {
                         :
                         props.peers.map((peer, i) => {
                             if (props.peerStreams[peer.uuid]) {
+                                const ats = props.peerStreams[peer.uuid].getAudioTracks()
                                 const vts = props.peerStreams[peer.uuid].getVideoTracks()
+                                const isMuted = ats.length === 0 || props.peersWithMicsOff.includes(peer.uuid)
                                 const showImage = vts.length === 0 || props.peersWithVideosOff.includes(peer.uuid)
 
                                 return (
@@ -238,7 +241,7 @@ const MeetingComponent = (props) => {
                                             </div>
                                             <div className={classes.personInfo}>
                                                 <Typography component="p" className={classes.cardName}>
-                                                    {peer.full_name}
+                                                    {peer.full_name} {isMuted ? "(Muted)" : ""}
                                                 </Typography>
                                             </div>
                                         </Card>
@@ -259,7 +262,7 @@ const MeetingComponent = (props) => {
                                             />
                                             <div className={classes.personInfo}>
                                                 <Typography component="p" className={classes.cardName}>
-                                                    {peer.full_name}
+                                                    {peer.full_name} {isMuted ? "(Muted)" : ""}
                                                 </Typography>
                                             </div>
                                         </Card>
