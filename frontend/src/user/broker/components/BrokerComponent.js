@@ -4,6 +4,9 @@ import {
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
+/**
+ * Styles for custom material ui styling
+ */
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
@@ -13,6 +16,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+/**
+ * Renders a circular progress ring while its parent processes login information
+ * 
+ * @returns {JSX.Element} BrokerComponent
+ */
 const BrokerComponent = () => {
 
     const classes = useStyles()
