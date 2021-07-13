@@ -8,8 +8,6 @@ class Topic(models.Model):
     """
     A class representing a Topic Instance
 
-    ...
-
     Attributes
     ----------
     title : CharField
@@ -25,33 +23,33 @@ class Topic(models.Model):
     """
 
     title = models.CharField(
-        max_length = 1023,
-        blank = False,
-        null = False
+        max_length=1023,
+        blank=False,
+        null=False
     )
 
     description = models.CharField(
-        max_length = 2055,
-        blank = True,
-        null = True
+        max_length=2055,
+        blank=True,
+        null=True
     )
 
     creator = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        null = False,
-        on_delete = models.CASCADE,
-        related_name = "topics"
+        null=False,
+        on_delete=models.CASCADE,
+        related_name="topics"
     )
 
     team = models.ForeignKey(
         Team,
-        null = False,
-        on_delete = models.CASCADE,
-        related_name = "topics"
+        null=False,
+        on_delete=models.CASCADE,
+        related_name="topics"
     )
 
     publish_time = models.DateTimeField(
-        auto_now_add = True
+        auto_now_add=True
     )
 
     def __str__(self):

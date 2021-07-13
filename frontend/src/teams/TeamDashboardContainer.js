@@ -11,6 +11,16 @@ import LoaderComponent from "../common/Loader/components/LoaderComponent"
 import TeamDashboardComponent from "./components/TeamDashboardComponent"
 
 
+/**
+ * Container for Team Dashboard Component
+ * 
+ * This component handles the logic for retrieving all the topics corresponding to a team and passing it 
+ * on to the `Team Dashboard Component`
+ * 
+ * @param {Object} props 
+ * 
+ * @returns {JSX.Element} TeamDashboard
+ */
 const TeamDashboard = (props) => {
 
     const teamCode = props.match.params.code
@@ -34,9 +44,10 @@ const TeamDashboard = (props) => {
 
     useEffect(() => {
 
-        if(apiState === "success"){
+        // Retrieve team information from the backend
+        if (apiState === "success") {
             const cancelTokenSource = axios.CancelToken.source()
-    
+
             axios.get(apiTeamsDetails(teamCode), {
                 cancelToken: cancelTokenSource.token
             }).then(res => {
@@ -54,6 +65,7 @@ const TeamDashboard = (props) => {
 
     }, [])
 
+    // Retrieve team information from the backend
     const retrieveTeamInfo = () => {
         axios.get(apiTeamsDetails(teamCode)).then(res => {
             setTeamInfo(res.data)
@@ -93,6 +105,7 @@ const TeamDashboard = (props) => {
         setCreateTopicDescription(value)
     }
 
+    // Make a request to leave the team on the backend
     const handleLeaveTeam = () => {
 
         axios.get(apiTeamsLeave(teamCode)).then(res => {
@@ -103,22 +116,23 @@ const TeamDashboard = (props) => {
 
     }
 
+    // Make the request to the backend to publish the topic stored in state variables
     const handleCreateTopicPublish = () => {
 
-        if(createTopicTitle.length === 0){
+        if (createTopicTitle.length === 0) {
             setIsCreateTopicTitleNull(true)
-        }else{
+        } else {
             setIsCreateTopicTitleNull(false)
         }
 
-        if(createTopicDescription.length === 0){
+        if (createTopicDescription.length === 0) {
             setIsCreateTopicDescriptionNull(true)
-        }else{
+        } else {
             setIsCreateTopicDescriptionNull(false)
         }
 
-        if(createTopicTitle.length !== 0 && createTopicDescription.length !== 0){
-            
+        if (createTopicTitle.length !== 0 && createTopicDescription.length !== 0) {
+
             axios.post(apiTopics, {
                 "title": createTopicTitle,
                 "description": createTopicDescription,
@@ -144,12 +158,12 @@ const TeamDashboard = (props) => {
 
 
 
-    if(apiState === "norequest"){
+    if (apiState === "norequest") {
         performVerify(dispatch)
         return <Redirect to={`/loader/?redirect=/teams/${teamCode}`} />
-    }else{
+    } else {
 
-        if(receivedTeamInfo){
+        if (receivedTeamInfo) {
 
             return (
                 <>
@@ -188,7 +202,7 @@ const TeamDashboard = (props) => {
                 </>
             )
 
-        }else{
+        } else {
 
             return (
                 <LoaderComponent />

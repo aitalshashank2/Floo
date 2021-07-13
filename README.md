@@ -1,5 +1,11 @@
 <h1 style="text-align: center;">Floo</h1>
 
+<p align="center">
+    <img src="https://img.shields.io/github/license/aitalshashank2/Floo" />
+    <img src="https://img.shields.io/tokei/lines/github/aitalshashank2/Floo" />
+    <img src="https://img.shields.io/github/issues-pr-closed/aitalshashank2/Floo" />
+</p>
+
 **Floo** is a platform for hosting meetings.
 
 ## Setup guidelines

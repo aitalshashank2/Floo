@@ -1,6 +1,6 @@
 import axios from "axios"
 
-import { 
+import {
     apiUserLogin,
     apiUserLogout,
     apiUserVerify
@@ -11,8 +11,14 @@ import {
     dispatchPendingState,
     dispatchUserDetails,
     dispatchLogout
- } from "./state/dispatchers"
+} from "./state/dispatchers"
 
+/**
+ * Make a login request to the backend while sending the authorization code to the backend
+ * 
+ * @param {string} code The autorization code to be sent to the backend
+ * @param {Dispatch} dispatch Hook used for dispatching the response received from backend
+ */
 export const performLogin = (code, dispatch) => {
 
     dispatchPendingState(dispatch)
@@ -26,6 +32,11 @@ export const performLogin = (code, dispatch) => {
 
 }
 
+/**
+ * Make a logout request to the backend
+ * 
+ * @param {Dispatch} dispatch Hook used for dispatching the response received from backend
+ */
 export const performLogout = (dispatch) => {
 
     dispatchLogout(dispatch)
@@ -37,6 +48,12 @@ export const performLogout = (dispatch) => {
 
 }
 
+/**
+ * Make a verify request to the backend.
+ * Depending on the response, dispatch user details or error details
+ * 
+ * @param {Dispatch} dispatch 
+ */
 export const performVerify = (dispatch) => {
 
     axios.get(apiUserVerify).then(res => {

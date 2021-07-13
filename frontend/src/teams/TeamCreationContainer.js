@@ -9,6 +9,14 @@ import { apiTeamsBase, apiTeamsJoin } from "../endpoints"
 import Nav from "../common/Nav/NavContainer"
 import TeamCreationComponent from "./components/TeamCreationComponent"
 
+/**
+ * Container for Team Creation Component
+ * 
+ * This component handles the logic for acquring the team details from the `Team Creation Component` and make an adequate request 
+ * to the backend
+ * 
+ * @returns {JSX.Element} TeamCreation
+ */
 const TeamCreation = () => {
 
     const [name, setName] = useState()
@@ -31,10 +39,10 @@ const TeamCreation = () => {
     }
 
     const handleCreate = () => {
-        if(name.length === 0){
+        if (name.length === 0) {
             changeIsNameNull(true)
-        }else{
-            
+        } else {
+
             axios.post(apiTeamsBase, {
                 "name": name,
                 "members": [
@@ -51,9 +59,9 @@ const TeamCreation = () => {
 
     const handleJoin = () => {
 
-        if(code.length === 0){
+        if (code.length === 0) {
             changeIsCodeNull(true)
-        }else{
+        } else {
 
             axios.get(apiTeamsJoin(code.toLowerCase())).then(res => {
                 window.location = `/teams/${res.data.code}`

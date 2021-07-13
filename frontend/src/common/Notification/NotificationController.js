@@ -3,6 +3,13 @@ import { useSelector } from "react-redux"
 import NotificationComponent from "./components/NotificationComponent"
 
 
+/**
+ * Controller for Notifications
+ * 
+ * This component houses the logic for rendering the notifications
+ * 
+ * @returns {JSX.Element} Notification
+ */
 const Notification = () => {
 
     const user = useSelector(state => state.user)

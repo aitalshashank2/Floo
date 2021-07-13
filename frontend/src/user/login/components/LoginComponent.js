@@ -12,8 +12,20 @@ import FirePlaceRoundedIcon from "@material-ui/icons/FireplaceRounded"
 
 import logo from "../../../common/assets/green-fire.png"
 
+/**
+ * Component for rendering the login screen
+ * 
+ * @param {Object} props 
+ * 
+ * @param {string} props.googleRedirect The URL to which user should be redirected to after they click the `Login with Google` button
+ * 
+ * @returns {JSX.Element} LoginComponent
+ */
 const LoginComponent = (props) => {
 
+    /**
+     * Styles for custom material ui styling
+     */
     const useStyles = makeStyles((theme) => ({
         root: {
             height: "100vh",

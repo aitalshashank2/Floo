@@ -6,6 +6,9 @@ import {
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
+/**
+ * Styles for custom material ui styling
+ */
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "100vh"
@@ -18,6 +21,18 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+/**
+ * Renders a component that warns the user that they are a part of other meeting at the moment
+ * 
+ * @param {Object} props 
+ * 
+ * @param {Array<Object>} props.otherMeetings List of the other meetings that the user is a part of
+ * 
+ * @callback props.handleProceedToMeeting Handle the event in which user chooses to proceed to the meeting
+ * @callback props.goToHome Handle the event in which the user chooses to proceed to Home
+ * 
+ * @returns {JSX.Element} WarningOtherMeetingComponent
+ */
 const WarningOtherMeetingComponent = (props) => {
 
     const classes = useStyles()

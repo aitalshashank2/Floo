@@ -6,10 +6,33 @@ from Floo.serializers.user import UserGetSerializer
 
 
 class TopicSerializer(ModelSerializer):
-    meeting = MeetingSerializer(read_only = True, many = True)
-    creator = UserGetSerializer(read_only = True)
+    """Serializer class which serializes Topic instances
+
+    This serializer cannot modify any of the attributes and should be used in methods which retrieve information only.
+
+    Attributes
+    ----------
+    meeting : MeetingSerializer
+        Serializes the meeting instances associated with the topic (a ForeignKey from Meeting Model to Topic Model)
+    creator : UserGetSerializer
+        Serializes the creator instance of the topic (ForeignKey to User Model)
+    """
+    meeting = MeetingSerializer(read_only=True, many=True)
+    creator = UserGetSerializer(read_only=True)
 
     class Meta:
+        """
+        Class specifying configuration variables for the model serializer
+
+        Attributes
+        ----------
+        model : django.db.models.Model
+            The model that the serializer serializes
+        fields : list
+            The attributes of the model that are supposed to be serialized
+        read_only_fields : list
+            The attributes specified in the attribute `fields` that should not be modified
+        """
         model = Topic
         fields = [
             'id',
@@ -30,8 +53,24 @@ class TopicSerializer(ModelSerializer):
 
 
 class TopicPostSerializer(ModelSerializer):
+    """Serializer class which serializes Topic instances
+
+    The serializer that can modify some attributes of the model. This must be used in methods that need to modify data.
+    """
 
     class Meta:
+        """
+        Class specifying configuration variables for the model serializer
+
+        Attributes
+        ----------
+        model : django.db.models.Model
+            The model that the serializer serializes
+        fields : list
+            The attributes of the model that are supposed to be serialized
+        read_only_fields : list
+            The attributes specified in the attribute `fields` that should not be modified
+        """
         model = Topic
         fields = [
             'title',

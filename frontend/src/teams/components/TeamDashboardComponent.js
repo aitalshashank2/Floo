@@ -31,6 +31,9 @@ import Chat from "../../chat/ChatContainer"
 
 var moment = require('moment')
 
+/**
+ * Styles for custom material ui styling
+ */
 const useStyles = makeStyles((theme) => ({
     '@global': {
         '*::-webkit-scrollbar': {
@@ -112,6 +115,33 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+/**
+ * Component for rendering all the topics and details of a team
+ * 
+ * @param {Object} props 
+ * 
+ * @param {Object} props.teamInfo Information about the team to be displayed
+ * @param {Array<Object>} props.topicDialog List of topics corresponding to the team
+ * 
+ * @param {boolean} props.isSettingsDialogOpen `true` if the dialog showing all the team details is open
+ * @param {boolean} props.isCreateTopicDialogOpen `true`if the dialog enabling creation of new topic open
+ * @param {boolean} props.isCreateTopicTitleNull `true` if the Text Field containing `Title` is null in `Create Topic` Dialog
+ * @param {boolean} props.isCreateTopicDescriptionNull `true` if the Text Field containing `Description` is null in `Create Topic` Dialog
+ * @param {boolean} props.isTopicDialogOpen `true` if the dialog containing details about one of the topics in the team is open
+ * 
+ * @callback props.closeSettingsDialog Handle the event in which the user closes the settings dialog
+ * @callback props.handleLeaveTeam Handle the event in which the user leaves the team
+ * @callback props.handleCopyTeamCode Handle the event in which the user clicks on `Copy Team Code` button
+ * @callback props.openCreateTopicDialog Handle the event in which the user clicks a button to open the `Create Topic` Dialog
+ * @callback props.closeCreateTopicDialog Handle the event in which the user closes the `Create Topic` Dialog
+ * @callback props.openTopicDialog Handle the event in which the user clicks one of the topic cards
+ * @callback props.closeTopicDialog Handle the event in which the user closes the detail view of a topic
+ * @callback props.handleCreateTopicTitle Handle the event in which the user enters some text in `Title` field in `Create Topic` Dialog
+ * @callback props.handleCreateTopicDescription Handle the event in which the user enters some text in `Description` field in `Create Topic` Dialog
+ * @callback props.handleCreateTopicPublish Handle the event in which the user clicks the button for creating a new topic
+ * 
+ * @returns  {JSX.Element} TeamDashboardComponent
+ */
 const TeamDashboardComponent = (props) => {
 
     const classes = useStyles()

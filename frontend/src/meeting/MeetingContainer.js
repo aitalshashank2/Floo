@@ -12,6 +12,15 @@ import WebRTCContainer from "./WebRTCContainer"
 import PreviewComponent from "./components/PreviewComponent"
 import WarningOtherMeetingComponent from "./components/WarningOtherMeetingComponent"
 
+/**
+ * Container for all Meeting Components
+ * 
+ * This component houses logic for rendering all the meeting components
+ * 
+ * @param {Object} props 
+ * 
+ * @returns {JSX.Element} Meeting
+ */
 const Meeting = (props) => {
 
     const apiState = useSelector(state => state.user.apiState)
@@ -55,6 +64,7 @@ const Meeting = (props) => {
 
     useEffect(() => {
 
+        // Retrieve meeting details
         const cancelTokenSourceMeetingDetail = axios.CancelToken.source()
         axios.get(apiMeetingDetail(code), {
             cancelToken: cancelTokenSourceMeetingDetail.token
@@ -66,21 +76,23 @@ const Meeting = (props) => {
             console.log(err)
         })
 
+        // Retrieve all the meetings in which the user is already present
         const cancelTokenSourcePresentMeeting = axios.CancelToken.source()
         axios.get(apiUserPresentMeetings, {
             cancelToken: cancelTokenSourcePresentMeeting.token
         }).then(res => {
-            if(res.data.length > 0){
+            if (res.data.length > 0) {
                 setReceivedOtherMeetingDetails(true)
                 setIsPartOfAnotherMeeting(true)
                 setOtherMeetings(res.data)
-            }else{
+            } else {
                 setReceivedOtherMeetingDetails(true)
             }
         }).catch(err => {
             console.log(err)
         })
 
+        // Cleanup
         return () => {
             cancelTokenSourceMeetingDetail.cancel("Cancelling in cleanup")
             cancelTokenSourcePresentMeeting.cancel("Cancelling in cleanup")
@@ -89,7 +101,6 @@ const Meeting = (props) => {
     }, [])
 
     const handleProceedToMeeting = () => {
-        // console.log(code)
         setIsPartOfAnotherMeeting(false)
     }
 
@@ -102,8 +113,8 @@ const Meeting = (props) => {
         return <Redirect to={`/loader/?redirect=/meeting/${code}`} />
     } else {
 
-        if(receivedOtherMeetingDetails){
-            if(isPartOfAnotherMeeting){
+        if (receivedOtherMeetingDetails) {
+            if (isPartOfAnotherMeeting) {
 
                 return (
                     <WarningOtherMeetingComponent
@@ -113,7 +124,7 @@ const Meeting = (props) => {
                     />
                 )
 
-            }else{
+            } else {
                 if (approved) {
                     return (
                         <WebRTCContainer
@@ -128,8 +139,8 @@ const Meeting = (props) => {
                         />
                     )
                 } else {
-        
-        
+
+
                     return (
                         <PreviewComponent
                             code={code}
@@ -143,7 +154,7 @@ const Meeting = (props) => {
                 }
             }
 
-        }else{
+        } else {
 
             return (
                 <LoaderComponent />

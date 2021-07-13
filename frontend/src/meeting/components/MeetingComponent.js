@@ -21,11 +21,38 @@ import VideocamOffIcon from "@material-ui/icons/VideocamOff"
 
 import Chat from "../../chat/ChatContainer"
 
-
+/**
+ * Component for rendering the meeting view
+ * 
+ * @param {Object} props 
+ * 
+ * @param {boolean} props.isChatDrawerOpen `true` if chat drawer is open
+ * @param {number} props.topicID The ID of the topic that the meeting is linked to (if available)
+ * @param {string} props.meetingCode The code of the ongoing meeting
+ * 
+ * @param {MediaStream} props.selfStream Contains the media stream of the user
+ * @param {Array<string>} props.peers List of the uuids of the participants
+ * @param {Object<string, MediaStream>} props.peerStreams Dictionary mapping media streams of the peers with their uuids
+ * @param {Array<string>} props.peersWithVideosOff List of the uuids of all the participants with their video off
+ * 
+ * @param {boolean} props.isMicActive `true` is microphone is active
+ * @param {boolean} props.isVideoActive `true` if video is active
+ * 
+ * @callback props.handleCopyLink Function that copies the meeting link to clipboard
+ * @callback props.handleToggleMic Function that toggles the state of microphone
+ * @callback props.handleToggleVideo Function that toggles the state of video feed
+ * @callback props.toggleChatDrawer Function that toggles the chat drawer
+ * @callback props.handleLeave Function that removes the user from the meeting
+ * 
+ * @returns {JSX.Element} MeetingComponent
+ */
 const MeetingComponent = (props) => {
 
     const drawerWidth = 350
 
+    /**
+     * Styles for custom material ui styling
+     */
     const useStyles = makeStyles((theme) => ({
         '@global': {
             '*::-webkit-scrollbar': {
@@ -122,8 +149,10 @@ const MeetingComponent = (props) => {
 
     useEffect(() => {
 
+        // Render self video
         document.getElementById(`video-self`).srcObject = props.selfStream
 
+        // For each of the peers, find the video element and set source for each of the elements
         props.peers.forEach((peer) => {
             if (props.peerStreams[peer.uuid]) {
                 if (props.peerStreams[peer.uuid].getVideoTracks().length !== 0 && !props.peersWithVideosOff.includes(peer.uuid)) {

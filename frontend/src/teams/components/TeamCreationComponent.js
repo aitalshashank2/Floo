@@ -2,7 +2,6 @@ import {
     Avatar,
     CssBaseline,
     Grid,
-    Hidden,
     IconButton,
     Paper,
     TextField,
@@ -12,8 +11,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles"
 import FireplaceRoundedIcon from "@material-ui/icons/FireplaceRounded"
 
-import logo from "../../common/assets/green-fire.png"
-
+/**
+ * Styles for custom material ui styling
+ */
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "100vh"
@@ -56,6 +56,22 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+/**
+ * Component for rendering a view where users can create or join a team
+ * 
+ * @param {Object} props 
+ * 
+ * @param {boolean} props.isCodeNull `true` if the team code entered (to join) is empty
+ * @param {string} props.errorTextCode Error text to be displayed below `Join Team` text field
+ * @param {boolean} props.isNull `true` if the name of the new team is empty
+ * 
+ * @callback props.handleCode Function that handles the event in which the user types something in the text field for joining a team
+ * @callback props.handleJoin Function that handles the event in which the user wants to join the team
+ * @callback props.handleName Function that handles the event in which the user types something in the text field for creating a team
+ * @callback props.handleCreate Function that handles the event in which the user wants to create a team
+ * 
+ * @returns {JSX.Element} TeamCreationComponent
+ */
 const TeamCreationComponent = (props) => {
 
     const classes = useStyles()

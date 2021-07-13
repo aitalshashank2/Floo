@@ -10,6 +10,11 @@ import Page404 from "./page404/Page404Container"
 import TeamCreation from "./teams/TeamCreationContainer"
 import TeamDashboard from "./teams/TeamDashboardContainer"
 
+/**
+ * This component renders different components based on the URL
+ * 
+ * @returns {JSX.Element} BaseRouter
+ */
 const BaseRouter = () => {
     return (
         <Switch>

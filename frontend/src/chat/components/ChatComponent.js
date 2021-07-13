@@ -16,7 +16,9 @@ import { Scrollbars } from 'react-custom-scrollbars'
 
 var moment = require('moment')
 
-
+/**
+ * Styles for custom material ui styling
+ */
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "100%",
@@ -53,10 +55,25 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
+/**
+ * Component for rendering messages in a particular chat
+ * 
+ * @param {Object} props
+ * 
+ * @param {Array<Object>} props.message Arrays of objects containing Objects
+ * @param {string} props.newMessage Variable storing the contents of TextField where user types new messages
+ * @param {boolean} props.showContentSavingWarning Boolean deciding if the message warning about messages not being saved should be displayed
+ * 
+ * @callback props.handleTextBox Function handling changes in message TextField
+ * @callback props.handleSend Function that handles if the button for sending message is clicked
+ * 
+ * @returns {JSX.Element} ChatComponent
+ */
 const ChatComponent = (props) => {
 
     const classes = useStyles()
 
+    // Reference to an empty div element to scroll the chat window down
     const scrollRef = useRef()
 
     useEffect(() => {
@@ -75,14 +92,14 @@ const ChatComponent = (props) => {
             <CssBaseline />
 
             <div className={classes.chatContainer}>
-                
+
                 <Scrollbars style={{ height: "100%", width: "100%" }}>
                     {
-                        props.showContentSavingWarning && 
+                        props.showContentSavingWarning &&
                         (
                             <Card>
                                 <CardContent variant="caption" className={classes.contentSavingWarning}>
-                                    This meeting is not created from within a team and hence the messages can 
+                                    This meeting is not created from within a team and hence the messages can
                                     only be seen by people in the call. The messages are not saved and are unavailable
                                     when the call ends. If the messages need to be preserved, please organize a meeting
                                     from within a team.

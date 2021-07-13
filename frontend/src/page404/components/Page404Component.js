@@ -5,6 +5,9 @@ import {
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
+/**
+ * Styles for custom material ui styling
+ */
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "100vh"
@@ -14,7 +17,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Page404Component = () =>{
+/**
+ * Component for rendering Page 404
+ * 
+ * @returns {JSX.Element} Page404Component
+ */
+const Page404Component = () => {
 
     const classes = useStyles()
 

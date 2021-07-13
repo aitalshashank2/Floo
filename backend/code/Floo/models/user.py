@@ -9,8 +9,6 @@ class User(AbstractUser):
     """
     A class representing a User instance
 
-    ...
-
     Attributes
     ----------
     username : CharField
@@ -21,7 +19,7 @@ class User(AbstractUser):
         A field which stores the link to the profile picture of the user
     uuid : UUIDField
         A field storing a unique identifier corresponding to the user
-    
+
     Methods
     -------
     get_uuid()
