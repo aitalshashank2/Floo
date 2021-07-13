@@ -27,19 +27,30 @@ import MeetingComponent from "./components/MeetingComponent"
  */
 const WebRTCContainer = (props) => {
 
+    // Reference for storing a websocket connection
     const ws = useRef()
+    // Reference for storing all the peer objects
     const peerObjects = useRef({})
+    // Reference for storing the video feed of the current user
     const selfStreamRef = useRef()
+    // Reference for storing the list of senders generated during creating a peer connection
     const senders = useRef({})
 
+    // State containing the video feed of the current user
     const [selfStream, setSelfStream] = useState()
+    // State containing the list of uuids of peers
     const [peers, changePeers] = useState([])
+    // Dictionary containing the media streams of the peer connections
     const [peerStreams, setPeerStreams] = useState({})
+    // List of peers who have their video off
     const [peersWithVideosOff, changePeersWithVideosOff] = useState([])
 
+    // Reference to store active state of microphone
     const micRef = useRef(props.micState)
+    // Reference to store active state of video feed
     const videoRef = useRef(props.videoState)
 
+    // State variable subscribed to redux store housing user information
     const self = useSelector(state => state.user.userDetails)
 
     useEffect(() => {
@@ -278,7 +289,7 @@ const WebRTCContainer = (props) => {
     }
 
     // Component event handlers
-    
+
     const handleCopyLink = () => {
         navigator.clipboard.writeText(routeMeeting(props.code))
     }
