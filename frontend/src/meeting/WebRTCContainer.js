@@ -1,9 +1,11 @@
+import { Link } from "@material-ui/core"
 import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 
 import { apiWSMeetingSignal, routeMeeting } from "../endpoints"
 import MeetingComponent from "./components/MeetingComponent"
 
+const moment = require("moment")
 
 /**
  * Container for Meeting Component
@@ -49,6 +51,13 @@ const WebRTCContainer = (props) => {
     const micRef = useRef(props.micState)
     // Reference to store active state of video feed
     const videoRef = useRef(props.videoState)
+
+    // State to store recording state
+    const [isRecording, setIsRecording] = useState(false)
+    // Reference to store the screen recorder object
+    const screenRecorderRef = useRef()
+    // Reference to store the screen stream
+    const screenStreamRef = useRef()
 
     // State variable subscribed to redux store housing user information
     const self = useSelector(state => state.user.userDetails)
@@ -366,17 +375,90 @@ const WebRTCContainer = (props) => {
         window.location = "/"
     }
 
+    const download = (blob, fileName = `floo-recording-${props.code}-${moment().format('LLL')}.mp4`) => {
+
+        if (navigator && navigator.msSaveOrOpenBlob) {
+            return navigator.msSaveOrOpenBlob(blob, fileName)
+        }
+
+        // Work-around for firefox
+        const blobURL = URL.createObjectURL(blob)
+
+        const blobLink = document.createElement('a')
+        blobLink.href = blobURL
+        blobLink.download = fileName
+
+        blobLink.dispatchEvent(new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window
+        }))
+
+        setTimeout(() => {
+            URL.revokeObjectURL(blobURL)
+            blobLink.remove()
+        }, 100)
+
+    }
+
+    const toggleRecording = () => {
+
+        if (!isRecording) {
+            navigator.mediaDevices.getDisplayMedia({
+                video: {
+                    MediaSource: "screen",
+                    cursor: "always"
+                },
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 44100
+                }
+            }).then(stream => {
+                screenRecorderRef.current = new MediaRecorder(stream)
+                screenStreamRef.current = stream
+
+                const chunks = []
+                screenRecorderRef.current.ondataavailable = (e) => {
+                    chunks.push(e.data)
+                }
+                screenRecorderRef.current.onstop = e => {
+                    const blob = new Blob(chunks, {
+                        type: chunks[0].type
+                    })
+                    download(blob)
+                }
+                screenRecorderRef.current.start()
+            })
+        } else {
+            if (screenStreamRef.current) {
+                screenRecorderRef.current.stop()
+                screenStreamRef.current.getTracks().forEach(track => track.stop())
+            }
+        }
+
+        setIsRecording(prev => {
+            return !prev
+        })
+
+    }
+
     return (
         <MeetingComponent
             selfStream={selfStream}
             peers={peers}
             peerStreams={peerStreams}
+
             isMicActive={props.micState}
             isVideoActive={props.videoState}
+            isRecording={isRecording}
+
             handleCopyLink={handleCopyLink}
             handleToggleMic={handleToggleMic}
             handleToggleVideo={handleToggleVideo}
             handleLeave={handleLeave}
+            toggleRecording={toggleRecording}
+
             peersWithVideosOff={peersWithVideosOff}
             topicID={props.topicID}
             isChatDrawerOpen={props.isChatDrawerOpen}

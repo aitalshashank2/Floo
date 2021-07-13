@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core"
 import CallEndIcon from "@material-ui/icons/CallEnd"
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import LinkIcon from '@material-ui/icons/Link';
 import MicIcon from "@material-ui/icons/Mic"
 import MicOffIcon from "@material-ui/icons/MicOff"
@@ -37,11 +38,13 @@ import Chat from "../../chat/ChatContainer"
  * 
  * @param {boolean} props.isMicActive `true` is microphone is active
  * @param {boolean} props.isVideoActive `true` if video is active
+ * @param {boolean} props.isRecording `true` if screen recording is turned on
  * 
  * @callback props.handleCopyLink Function that copies the meeting link to clipboard
  * @callback props.handleToggleMic Function that toggles the state of microphone
  * @callback props.handleToggleVideo Function that toggles the state of video feed
  * @callback props.toggleChatDrawer Function that toggles the chat drawer
+ * @callback props.toggleRecording Function that toggles the recording state
  * @callback props.handleLeave Function that removes the user from the meeting
  * 
  * @returns {JSX.Element} MeetingComponent
@@ -273,6 +276,22 @@ const MeetingComponent = (props) => {
                         <LinkIcon />
                     </Avatar>
                 </Tooltip>
+                {
+                    props.isRecording
+                        ?
+                        <Tooltip title="Stop recording" onClick={() => props.toggleRecording()}>
+                            <Avatar className={classes.avatarRed}>
+                                <FiberManualRecordIcon />
+                            </Avatar>
+                        </Tooltip>
+                        :
+                        <Tooltip title="Start recording" onClick={() => props.toggleRecording()}>
+                            <Avatar className={classes.avatar}>
+                                <FiberManualRecordIcon />
+                            </Avatar>
+                        </Tooltip>
+
+                }
                 {
                     props.isMicActive
                         ?
