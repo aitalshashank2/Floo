@@ -452,17 +452,23 @@ const WebRTCContainer = (props) => {
                     download(blob)
                 }
                 screenRecorderRef.current.start()
+            }).then(() => {
+                setIsRecording(prev => {
+                    return !prev
+                })
+            }).catch(err => {
+                // Pass
             })
         } else {
             if (screenStreamRef.current) {
                 screenRecorderRef.current.stop()
                 screenStreamRef.current.getTracks().forEach(track => track.stop())
             }
+            setIsRecording(prev => {
+                return !prev
+            })
         }
 
-        setIsRecording(prev => {
-            return !prev
-        })
 
     }
 
