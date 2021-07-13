@@ -1,9 +1,11 @@
+import { Link } from "@material-ui/core"
 import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 
 import { apiWSMeetingSignal, routeMeeting } from "../endpoints"
 import MeetingComponent from "./components/MeetingComponent"
 
+const moment = require("moment")
 
 /**
  * Container for Meeting Component
@@ -42,6 +44,8 @@ const WebRTCContainer = (props) => {
     const [peers, changePeers] = useState([])
     // Dictionary containing the media streams of the peer connections
     const [peerStreams, setPeerStreams] = useState({})
+    // List of peers who have their microphone off
+    const [peersWithMicsOff, changePeersWithMicsOff] = useState([])
     // List of peers who have their video off
     const [peersWithVideosOff, changePeersWithVideosOff] = useState([])
 
@@ -49,6 +53,13 @@ const WebRTCContainer = (props) => {
     const micRef = useRef(props.micState)
     // Reference to store active state of video feed
     const videoRef = useRef(props.videoState)
+
+    // State to store recording state
+    const [isRecording, setIsRecording] = useState(false)
+    // Reference to store the screen recorder object
+    const screenRecorderRef = useRef()
+    // Reference to store the screen stream
+    const screenStreamRef = useRef()
 
     // State variable subscribed to redux store housing user information
     const self = useSelector(state => state.user.userDetails)
@@ -135,6 +146,27 @@ const WebRTCContainer = (props) => {
             } else if ((payload.type === "VIDEO_ON")) {
 
                 changePeersWithVideosOff(prev => {
+                    let p = []
+                    prev.forEach(uuid => {
+                        if (uuid !== payload.data.uuid) {
+                            p.push(uuid)
+                        }
+                    })
+                    return p
+                })
+
+            } else if ((payload.type === "MIC_OFF")) {
+
+                changePeersWithMicsOff(prev => {
+                    return [
+                        ...prev,
+                        payload.data.uuid
+                    ]
+                })
+
+            } else if ((payload.type === "MIC_ON")) {
+
+                changePeersWithMicsOff(prev => {
                     let p = []
                     prev.forEach(uuid => {
                         if (uuid !== payload.data.uuid) {
@@ -318,7 +350,7 @@ const WebRTCContainer = (props) => {
             const payload = {
                 type: "MIC_OFF",
                 data: {
-                    user: self.uuid
+                    uuid: self.uuid
                 }
             }
             ws.current.send(JSON.stringify(payload))
@@ -366,17 +398,91 @@ const WebRTCContainer = (props) => {
         window.location = "/"
     }
 
+    const download = (blob, fileName = `floo-recording-${props.code}-${moment().format('LLL')}.mp4`) => {
+
+        if (navigator && navigator.msSaveOrOpenBlob) {
+            return navigator.msSaveOrOpenBlob(blob, fileName)
+        }
+
+        // Work-around for firefox
+        const blobURL = URL.createObjectURL(blob)
+
+        const blobLink = document.createElement('a')
+        blobLink.href = blobURL
+        blobLink.download = fileName
+
+        blobLink.dispatchEvent(new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window
+        }))
+
+        setTimeout(() => {
+            URL.revokeObjectURL(blobURL)
+            blobLink.remove()
+        }, 100)
+
+    }
+
+    const toggleRecording = () => {
+
+        if (!isRecording) {
+            navigator.mediaDevices.getDisplayMedia({
+                video: {
+                    MediaSource: "screen",
+                    cursor: "always"
+                },
+                audio: {
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    sampleRate: 44100
+                }
+            }).then(stream => {
+                screenRecorderRef.current = new MediaRecorder(stream)
+                screenStreamRef.current = stream
+
+                const chunks = []
+                screenRecorderRef.current.ondataavailable = (e) => {
+                    chunks.push(e.data)
+                }
+                screenRecorderRef.current.onstop = e => {
+                    const blob = new Blob(chunks, {
+                        type: chunks[0].type
+                    })
+                    download(blob)
+                }
+                screenRecorderRef.current.start()
+            })
+        } else {
+            if (screenStreamRef.current) {
+                screenRecorderRef.current.stop()
+                screenStreamRef.current.getTracks().forEach(track => track.stop())
+            }
+        }
+
+        setIsRecording(prev => {
+            return !prev
+        })
+
+    }
+
     return (
         <MeetingComponent
             selfStream={selfStream}
             peers={peers}
             peerStreams={peerStreams}
+
             isMicActive={props.micState}
             isVideoActive={props.videoState}
+            isRecording={isRecording}
+
             handleCopyLink={handleCopyLink}
             handleToggleMic={handleToggleMic}
             handleToggleVideo={handleToggleVideo}
             handleLeave={handleLeave}
+            toggleRecording={toggleRecording}
+
+            peersWithMicsOff={peersWithMicsOff}
             peersWithVideosOff={peersWithVideosOff}
             topicID={props.topicID}
             isChatDrawerOpen={props.isChatDrawerOpen}

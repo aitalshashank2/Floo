@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core"
 import CallEndIcon from "@material-ui/icons/CallEnd"
 import ChatOutlinedIcon from '@material-ui/icons/ChatOutlined'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import LinkIcon from '@material-ui/icons/Link';
 import MicIcon from "@material-ui/icons/Mic"
 import MicOffIcon from "@material-ui/icons/MicOff"
@@ -33,15 +34,18 @@ import Chat from "../../chat/ChatContainer"
  * @param {MediaStream} props.selfStream Contains the media stream of the user
  * @param {Array<string>} props.peers List of the uuids of the participants
  * @param {Object<string, MediaStream>} props.peerStreams Dictionary mapping media streams of the peers with their uuids
+ * @param {Array<string>} props.peersWithMicsOff
  * @param {Array<string>} props.peersWithVideosOff List of the uuids of all the participants with their video off
  * 
  * @param {boolean} props.isMicActive `true` is microphone is active
  * @param {boolean} props.isVideoActive `true` if video is active
+ * @param {boolean} props.isRecording `true` if screen recording is turned on
  * 
  * @callback props.handleCopyLink Function that copies the meeting link to clipboard
  * @callback props.handleToggleMic Function that toggles the state of microphone
  * @callback props.handleToggleVideo Function that toggles the state of video feed
  * @callback props.toggleChatDrawer Function that toggles the chat drawer
+ * @callback props.toggleRecording Function that toggles the recording state
  * @callback props.handleLeave Function that removes the user from the meeting
  * 
  * @returns {JSX.Element} MeetingComponent
@@ -210,7 +214,9 @@ const MeetingComponent = (props) => {
                         :
                         props.peers.map((peer, i) => {
                             if (props.peerStreams[peer.uuid]) {
+                                const ats = props.peerStreams[peer.uuid].getAudioTracks()
                                 const vts = props.peerStreams[peer.uuid].getVideoTracks()
+                                const isMuted = ats.length === 0 || props.peersWithMicsOff.includes(peer.uuid)
                                 const showImage = vts.length === 0 || props.peersWithVideosOff.includes(peer.uuid)
 
                                 return (
@@ -235,7 +241,7 @@ const MeetingComponent = (props) => {
                                             </div>
                                             <div className={classes.personInfo}>
                                                 <Typography component="p" className={classes.cardName}>
-                                                    {peer.full_name}
+                                                    {peer.full_name} {isMuted ? "(Muted)" : ""}
                                                 </Typography>
                                             </div>
                                         </Card>
@@ -256,7 +262,7 @@ const MeetingComponent = (props) => {
                                             />
                                             <div className={classes.personInfo}>
                                                 <Typography component="p" className={classes.cardName}>
-                                                    {peer.full_name}
+                                                    {peer.full_name} {isMuted ? "(Muted)" : ""}
                                                 </Typography>
                                             </div>
                                         </Card>
@@ -273,6 +279,22 @@ const MeetingComponent = (props) => {
                         <LinkIcon />
                     </Avatar>
                 </Tooltip>
+                {
+                    props.isRecording
+                        ?
+                        <Tooltip title="Stop recording" onClick={() => props.toggleRecording()}>
+                            <Avatar className={classes.avatarRed}>
+                                <FiberManualRecordIcon />
+                            </Avatar>
+                        </Tooltip>
+                        :
+                        <Tooltip title="Start recording" onClick={() => props.toggleRecording()}>
+                            <Avatar className={classes.avatar}>
+                                <FiberManualRecordIcon />
+                            </Avatar>
+                        </Tooltip>
+
+                }
                 {
                     props.isMicActive
                         ?
