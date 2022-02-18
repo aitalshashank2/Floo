@@ -141,7 +141,7 @@ class UserViewSet(viewsets.ModelViewSet):
             except User.DoesNotExist:
                 email = user_data['email']
                 full_name = user_data['name']
-                username = user_data['given_name']
+                username = user_data['email']
                 profile_picture = user_data['picture']
 
                 new_user = User(
