@@ -13,11 +13,11 @@
         ```
     - Enter all the required credentials as required.
 
-- Make `postgres/database.env` using `postgres/database-stencil.yml`.
+- Make `postgres/database.env` using `postgres/database-stencil.env`.
     - From the root of the project, run the following commands
         ```bash
         cd ./postgres/
-        cp database-stencil.yml database.yml
+        cp database-stencil.env database.env
         ```
     - Enter all the required credentials as required.
 
